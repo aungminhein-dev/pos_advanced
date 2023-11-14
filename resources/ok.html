@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light/Dark Mode Switch</title>
+    <style>
+        body {
+            transition: background-color 0.5s;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        #modeSwitch {
+            display: none;
+        }
+
+        .switch-label {
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .switch-label span {
+            margin-right: 10px;
+        }
+
+        .switch-input {
+            display: none;
+        }
+
+        .switch-input:checked + .switch-handle {
+            transform: translateX(26px);
+        }
+
+        .switch-handle {
+            width: 50px;
+            height: 20px;
+            background-color: #3498db;
+            border-radius: 10px;
+            position: relative;
+            transition: background-color 0.5s, transform 0.5s;
+        }
+
+        .switch-handle:before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background-color: #fff;
+            border-radius: 50%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="switch-label">
+        <span>Dark Mode</span>
+        <label for="modeSwitch" class="switch">
+            <input type="checkbox" id="modeSwitch" class="switch-input">
+            <span class="switch-handle"></span>
+        </label>
+    </div>
+</div>
+
+<script>
+    const modeSwitch = document.getElementById('modeSwitch');
+    const body = document.body;
+
+    modeSwitch.addEventListener('change', () => {
+        body.classList.toggle('dark-mode');
+    });
+</script>
+
+</body>
+</html>
