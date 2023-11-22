@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Brand;
 use App\Models\Category;
+use App\Models\ProductTag;
 use App\Models\ProductSize;
 use App\Models\SubCategory;
 use App\Models\ProductImage;
 use App\Models\ProductColour;
+use App\Models\ProductDiscount;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -14,7 +17,7 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'quantity', 'price', 'rating', 'sub_category_id','slug'];
+    protected $fillable = ['name', 'description', 'quantity', 'price', 'rating', 'sub_category_id','slug','view_count'];
 
 
 
@@ -52,5 +55,21 @@ class Product extends Model
     public function images()
     {
         return $this->hasMany(ProductImage::class);
+    }
+
+    // discounts
+    public function discount()
+    {
+        return $this->hasOne(ProductDiscount::class,'product_id','id');
+    }
+
+    public function tags()
+    {
+        return $this->hasMany(ProductTag::class);
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
     }
 }

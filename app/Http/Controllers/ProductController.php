@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductSize;
 use App\Models\SubCategory;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use App\Models\ProductColour;
+use App\Models\ProductTag;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -24,7 +25,8 @@ class ProductController extends Controller
     public function addPage()
     {
         $sub_categories = SubCategory::with('category')->get();
-        return view('admin.product.add-page', compact('sub_categories'));
+        $categories = Category::get();
+        return view('admin.product.add-page', compact('sub_categories','categories'));
     }
 
 
@@ -36,20 +38,35 @@ class ProductController extends Controller
         Product::create($data);
 
         $createdProductId = Product::orderBy('created_at', 'desc')->select('id')->first()->id;
-        foreach ($request->images as $image) {
-            $this->uploadImage($image, $createdProductId);
+
+        if($request->images){
+            foreach ($request->images as $image) {
+                $this->uploadImage($image, $createdProductId);
+            }
         }
-        foreach ($request->sizes as $size) {
-            ProductSize::create([
-                'size' => $size,
-                'product_id' => $createdProductId
-            ]);
+        if($request->sizes){
+            foreach ($request->sizes as $size) {
+                ProductSize::create([
+                    'size' => $size,
+                    'product_id' => $createdProductId
+                ]);
+            }
         }
-        foreach ($request->colours as $colour) {
-            ProductColour::create([
-                'colour' => $colour,
-                'product_id' => $createdProductId
-            ]);
+        if($request->colours){
+            foreach ($request->colours as $colour) {
+                ProductColour::create([
+                    'colour' => $colour,
+                    'product_id' => $createdProductId
+                ]);
+            }
+        }
+        if($request->tags){
+            foreach ($request->tags as $tag){
+                ProductTag::create([
+                    'tag' => $tag,
+                    'product_id' => $createdProductId
+                ]);
+            }
         }
         return redirect()->route('product.list')->with('created', 'A new product is created.');
     }
@@ -58,7 +75,8 @@ class ProductController extends Controller
     // product detail
     public function detail($slug)
     {
-        $product = Product::where('slug', $slug)->with(['subCategory', 'sizes', 'colours', 'images'])->first();
+
+        $product = Product::where('slug', $slug)->with(['subCategory', 'sizes', 'colours', 'images','discount'])->first();
         return view('admin.product.detail', compact('product'));
     }
 
@@ -79,20 +97,34 @@ class ProductController extends Controller
         Product::where('id',$request->productId)->update($data);
 
         $createdProductId = Product::where('id',$request->productId)->select('id')->first()->id;
-        foreach ($request->images as $image) {
-            $this->uploadImage($image, $createdProductId);
+        if($request->images){
+            foreach ($request->images as $image) {
+                $this->uploadImage($image, $createdProductId);
+            }
         }
-        foreach ($request->sizes as $size) {
-            ProductSize::create([
-                'size' => $size,
-                'product_id' => $createdProductId
-            ]);
+        if($request->sizes){
+            foreach ($request->sizes as $size) {
+                ProductSize::create([
+                    'size' => $size,
+                    'product_id' => $createdProductId
+                ]);
+            }
         }
-        foreach ($request->colours as $colour) {
-            ProductColour::create([
-                'colour' => $colour,
-                'product_id' => $createdProductId
-            ]);
+        if($request->colours){
+            foreach ($request->colours as $colour) {
+                ProductColour::create([
+                    'colour' => $colour,
+                    'product_id' => $createdProductId
+                ]);
+            }
+        }
+        if($request->tags){
+            foreach ($request->tags as $tag){
+                ProductTag::create([
+                    'tag' => $tag,
+                    'product_id' => $createdProductId
+                ]);
+            }
         }
         return redirect()->route('product.list')->with('updated', 'A new product is updated.');
     }
@@ -132,11 +164,11 @@ class ProductController extends Controller
     private function validateProductInputs($request)
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|unique:products,name,'.$request->productId,
             'description' => 'required',
             'price' => 'required',
             'subCategories' => 'required',
-            'quantity' => 'required'
+            'quantity' => 'required',
         ]);
     }
 
@@ -149,7 +181,8 @@ class ProductController extends Controller
             'price' => $request->price,
             'sub_category_id' => $request->subCategories,
             'quantity' => $request->quantity,
-            'slug' => strtolower(str_replace(' ', '-', $request->name))
+            'slug' => strtolower(str_replace(' ', '-', $request->name)),
+            'view_count' => 0
         ];
     }
 

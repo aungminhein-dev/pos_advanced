@@ -43,11 +43,35 @@ const addColor = () => {
 }
 
 // change category's input value
-const addCategory1 = (event) => {
-    const categoryInput = document.getElementById('categoryInput');
-    categoryName = event.target.options[event.target.selectedIndex].getAttribute('data-category');
-    categoryInput.value = categoryName;
-}
+const addSubCategory = (event) => {
+    const subCategories = document.getElementById('subCategories');
+    let subCategoriesArray;
+
+    $.ajax({
+        url: '/admin/sub-category/list',
+        method: 'get',
+        data: {
+            categoryId: event.target.value
+        },
+        success: function (responses) {
+            subCategoriesArray = responses;
+
+            // Check if subCategoriesArray is empty
+            if (subCategoriesArray.length === 0) {
+                // Clear the select box if there is no data
+                subCategories.innerHTML = '<option disabled selected>Select sub-category</option>';
+            } else {
+                // Populate the select box if there is data
+                subCategoriesArray.forEach(subCategory => {
+                    subCategories.insertAdjacentHTML('beforeend', `
+                        <option value="${subCategory.id}">${subCategory.name}</option>
+                    `);
+                });
+            }
+        }
+    });
+};
+
 
 // select all check boxes on a click
 const selectPills = document.getElementById('selectgroup-pills');
@@ -83,6 +107,23 @@ filteredNodes.forEach(label => {
     const checkbox = label.querySelector('input[type="checkbox"]');
     checkbox.addEventListener('change', checkAllSelected);
 });
+const addTags = () => {
+    let tagInput = document.getElementById("tag-input");
+    let tag = tagInput.value;
+
+    if (!tag) {
+        return;
+    }
+
+    const tagsContainer = document.querySelector('.tagsContainer');
+    tagsContainer.insertAdjacentHTML('beforeend', `
+        <label class="selectgroup-item">
+            <input type="checkbox" checked onchange="checkAllSelected()" name="tags[]" value="${"#" + tag}" class="selectgroup-input">
+            <span class="selectgroup-button">#${tag}</span>
+        </label>`
+    );
+    tagInput.value = '';
+}
 
 
 

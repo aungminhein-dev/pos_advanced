@@ -3,7 +3,10 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1 class="section-title">Category Details</h1>
+            <div class="section-header-back">
+                <a href="{{ route('category.list') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <h1>Category Detail</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
                 <div class="breadcrumb-item"><a href="#">Category</a></div>
@@ -21,7 +24,7 @@
                 <div class="row ">
 
                     <div class="col-12 col-lg-6 ">
-                        <img style="max-width:880px;" src="{{ asset($category->image) }}" alt=""
+                        <img style="max-width:500px;" src="{{ asset($category->image) }}" alt=""
                             class="d-block mx-auto rounded">
 
                     </div>
@@ -29,37 +32,11 @@
 
                         <div class=" p-3">
                             <h1 class="section-title">{{ $category->name }}</h1>
-                            <h6 class="text-muted mt-3">
-                                <div class="bullet"></div>
-                                {{ $category->description }}
+                            <h6 class=" mt-3">
+                                {!! $category->description !!}
                             </h6>
                         </div>
-                        <div class="">
-                            @foreach ($category->subCategories as $subC)
-                                @php
-                                    $colorArray = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
-                                    $indexer = $loop->index % count($colorArray);
-                                    $color = $colorArray[$indexer];
-                                @endphp
-                                <span class="mt-2 badge badge-{{ $color }}">{{ $subC->name }} ({{ $subC->products->count() }}) <a
-                                        href="{{ route('sub-category.delete', $subC->id) }}"><i class="fa-solid fa-xmark"
-                                            style="color: rgb(206, 183, 9)"></i></a></span>
-                            @endforeach
-                            <h3 class="section-title">Add Sub Category for this Category</h3>
-                            <form action="{{ route('sub-category.add') }}" method="post">
-                                @csrf
-                                <div class="form-group">
-                                    <label for="">Sub Category Name</label>
-                                    <input type="hidden" name="categoryId" value="{{ $category->id }}">
-                                    <input type="text" name="name"
-                                        class="form-control @error('name') is-invalid @enderror">
-                                    @error('name')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-                                <button class="btn btn-success" type="submit">Add</button>
-                            </form>
-                        </div>
+                       <livewire:admin.sub-category-form :category="$category" :id="$category->id"/>
                     </div>
                 </div>
                 <a href="{{ route('category.edit',$category->slug) }}"><i class="fa-solid fa-pencil"></i>edit</a>
@@ -67,4 +44,5 @@
         </div>
         </div>
     </section>
+
 @endsection

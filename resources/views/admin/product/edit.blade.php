@@ -115,16 +115,24 @@
                         </div>
                     </div>
                     <div class="col-12 col-lg-6">
+                        <label for="">Category</label>
+                        <select class="form-control selectric" onchange="addSubCategory(event)" name="subCategories">
+                            <option disabled selected>Select sub-category</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}">
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('subCategories')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                    <div class="col-12 col-lg-6">
                         <div class="form-group">
-                            <label>Sub-Category</label>
-                            <select class="form-control selectric" onchange="addCategory1(event)" name="subCategories">
+                            <label>Sub-Category <span class="text-danger">*</span></label>
+                            <select class="form-control selectric" id="subCategories" name="subCategories">
                                 <option disabled selected>Select sub-category</option>
-                                @foreach ($sub_categories as $sub_category)
-                                    <option value="{{ $sub_category->id }}"
-                                        data-category="{{ $sub_category->category->name }}"
-                                        @if ($product->sub_category_id == $sub_category->id) selected @endif>{{ $sub_category->name }}
-                                    </option>
-                                @endforeach
                             </select>
                             @error('subCategories')
                                 <small class="text-danger">{{ $message }}</small>
@@ -155,7 +163,8 @@
                                 </div>
                                 <div class="col-auto">
                                     <label class="colorinput">
-                                        <input name="colours[]" type="checkbox" value="#dc3545" class="colorinput-input" />
+                                        <input name="colours[]" type="checkbox" value="#dc3545"
+                                            class="colorinput-input" />
                                         <span class="colorinput-color bg-danger"></span>
                                     </label>
                                 </div>
@@ -191,7 +200,7 @@
                                     <div class="col-auto">
                                         <label class="colorinput">
                                             <input name="" type="checkbox" value="{{ $colour->colour }}"
-                                                class="colorinput-input" disabled/>
+                                                class="colorinput-input" disabled />
                                             <span class="colorinput-color"
                                                 style="background : {{ $colour->colour }}"></span>
                                         </label>
@@ -242,10 +251,10 @@
                             <label class="form-label">Selected sizes</label>
                             <div class="selectgroup selectgroup-pills" id="selectgroup-pills">
                                 @foreach ($product->sizes as $size)
-                                <label class="selectgroup-item">
-                                    <input type="checkbox" checked disabled value="s" class="selectgroup-input">
-                                    <span class="selectgroup-button">{{ $size->size }}</span>
-                                </label>
+                                    <label class="selectgroup-item">
+                                        <input type="checkbox" checked disabled value="s" class="selectgroup-input">
+                                        <span class="selectgroup-button">{{ $size->size }}</span>
+                                    </label>
                                 @endforeach
                             </div>
                         </div>
@@ -268,6 +277,23 @@
                             &nbsp; Choose Files To Upload
                         </label>
                     </div>
+                    <div class="col-12 col-lg-6">
+                        <div class="form-group">
+                            <div class="selectgroup selectgroup-pills tagsContainer" id="selectgroup-pills">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <span class="text-muted">Add Tags</span>
+                        <div class="form-group d-flex">
+                            <input id="tag-input" type="text" style="border-radius: 5px 0px 0px 5px"
+                                class="form-control" />
+                            <button class="btn btn-success btn-sm" style="border-radius: 0px 5px 5px 0px"
+                                onclick="addTags()" type="button">Add
+                                Tag</button>
+                        </div>
+                    </div>
                     <div class="col-12 mt-2">
                         <div class="form-group">
                             <textarea name="description" class="summernote-simple" placeholder="Write something to describe about the prouct...">{!! $product->description !!}</textarea>
@@ -286,24 +312,24 @@
 
 @endsection
 @section('myScript')
-<script>
-    $('.owl-carousel').owlCarousel({
-        loop: false,
-        margin: 10,
-        dots: false,
-        nav: false,
-        autoplay :true,
-        responsive: {
-            0: {
-                items: 1
-            },
-            600: {
-                items: 3
-            },
-            1000: {
-                items: 5
+    <script>
+        $('.owl-carousel').owlCarousel({
+            loop: false,
+            margin: 10,
+            dots: false,
+            nav: false,
+            autoplay: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 3
+                },
+                1000: {
+                    items: 5
+                }
             }
-        }
-    })
-</script>
+        })
+    </script>
 @endsection

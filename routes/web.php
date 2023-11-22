@@ -2,9 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\SubCategoryController;
 
 /*
@@ -50,6 +52,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         // sub categories
         Route::controller(SubCategoryController::class)->prefix('sub-category')->group(function(){
             Route::post('add','add')->name('sub-category.add');
+            Route::get('list','list')->name('sub-category.list');
             // Route::get('edit','edit')->name('sub-category.edit');
             // Route::put('update','update')->name('sub-category.update');
             Route::get('delete/{id}','delete')->name('sub-category.delete');
@@ -65,6 +68,20 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
             Route::post('update','update')->name('product.update');
             Route::post('delete','delete')->name('product.delete');
             Route::post('delete/image','deleteImage')->name('product.image.delete');
+        });
+
+        Route::controller(BrandController::class)->prefix('brand')->group(function(){
+            Route::get('add/page','addPage')->name('brand.addPage');
+            Route::get('list','list')->name('brand.list');
+            Route::post('add','add')->name('brand.add');
+            Route::get('edit/{id}','edit')->name('brand.edit');
+            Route::get('delete/{id}','delete')->name('brand.delete');
+            Route::post('update','update')->name('brand.update');
+        });
+        Route::controller(DiscountController::class)->prefix('discount')->group(function(){
+            Route::post('add','add')->name('discount.add');
+            Route::post('update','update')->name('discount.update');
+
         });
     });
 

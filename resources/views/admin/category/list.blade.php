@@ -3,7 +3,10 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1 class="section-title">Category List</h1>
+            <div class="section-header-back">
+                <a href="{{ route('admin.dashboard') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <h1>Category List</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
                 <div class="breadcrumb-item"><a href="#">Category</a></div>
@@ -67,7 +70,7 @@
                                                             width="50" class="rounded">
                                                     </a>
                                                 </td>
-                                                <td>{{ Str::limit($category->description, 20, '...') }}</td>
+                                                <td>{!! Str::limit($category->description, 20, '...') !!}</td>
                                                 <td>
                                                     <a href="{{ route('category.edit', $category->slug) }}"
                                                         class="btn btn-primary btn-action mr-1" data-toggle="tooltip"
@@ -93,7 +96,7 @@
                                 <p class="lead">
                                     Sorry we can't find any data, to get rid of this message, make at least 1 entry.
                                 </p>
-                                <a href="{{ route('product.add') }}" class="btn btn-primary mt-4">Create new One</a>
+                                <a href="{{ route('category.add') }}" class="btn btn-primary mt-4">Create new One</a>
                                 <a href="#" class="mt-4 bb">Need Help?</a>
                             </div>
                         </div>

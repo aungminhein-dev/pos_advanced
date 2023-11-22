@@ -63,7 +63,7 @@
 
                     <div class="col-12">
                         <div class="form-group">
-                            <label>Product Name</label>
+                            <label>Product Name <span class="text-danger">*</span></label>
                             <input type="text" name="name" placeholder="Enter produt name"
                                 class="form-control @error('name')  'is-invalid'  @enderror">
                             @error('name')
@@ -73,7 +73,7 @@
                     </div>
                     <div class="col-12 col-lg-6">
                         <div class="form-group">
-                            <label>Available Quantity</label>
+                            <label>Available Quantity <span class="text-danger">*</span></label>
                             <input type="number" name="quantity" placeholder="Enter quantity" id=""
                                 class="form-control @error('quantity') 'is-invalid'  @enderror">
                             @error('quantity')
@@ -83,7 +83,7 @@
                     </div>
                     <div class="col-12 col-lg-6">
                         <div class="form-group">
-                            <label>Price</label>
+                            <label>Price <span class="text-danger">*</span></label>
                             <input type="number" name="price" placeholder="Enter price"
                                 class="form-control @error('price') 'is-invalid'  @enderror">
                             @error('price')
@@ -92,30 +92,34 @@
                         </div>
                     </div>
                     <div class="col-12 col-lg-6">
+                        <label for="">Category</label>
+                        <select class="form-control selectric" onchange="addSubCategory(event)" name="subCategories">
+                            <option disabled selected>Select sub-category</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}">
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('subCategories')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                    <div class="col-12 col-lg-6">
                         <div class="form-group">
-                            <label>Sub-Category</label>
-                            <select class="form-control selectric" onchange="addCategory1(event)" name="subCategories">
+                            <label>Sub-Category <span class="text-danger">*</span></label>
+                            <select class="form-control selectric" id="subCategories" name="subCategories">
                                 <option disabled selected>Select sub-category</option>
-                                @foreach ($sub_categories as $sub_category)
-                                    <option value="{{ $sub_category->id }}"
-                                        data-category="{{ $sub_category->category->name }}">{{ $sub_category->name }}
-                                    </option>
-                                @endforeach
                             </select>
                             @error('subCategories')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                     </div>
-                    <div class="col-12 col-lg-6">
-                        <label for="">Category</label>
-                        <input type="text" id="categoryInput" value="Shirts" name="" class="form-control"
-                            disabled>
-                    </div>
 
                     <div class="col-12 col-lg-6">
                         <div class="form-group">
-                            <label class="form-label">Color Input</label>
+                            <label class="form-label">Color Input <span class="text-muted">(optional)</span></label>
                             <div class="row gutters-xs" id="colorContainer">
                                 <div class="col-auto">
                                     <label class="colorinput">
@@ -149,7 +153,8 @@
                                 </div>
                                 <div class="col-auto">
                                     <label class="colorinput">
-                                        <input name="colours[]" type="checkbox" value="#28a745" class="colorinput-input" />
+                                        <input name="colours[]" type="checkbox" value="#28a745"
+                                            class="colorinput-input" />
                                         <span class="colorinput-color bg-success"></span>
                                     </label>
                                 </div>
@@ -170,33 +175,37 @@
 
                     <div class="col-12 col-lg-6">
                         <div class="form-group">
-                            <label class="form-label">Choose Sizes</label>
+                            <label class="form-label">Choose Sizes <span class="text-muted">(optional)</span></label>
                             <div class="selectgroup selectgroup-pills" id="selectgroup-pills">
                                 <label class="selectgroup-item">
-                                    <input type="checkbox" onchange="checkAllSelected()" name="sizes[]" value="S" class="selectgroup-input">
+                                    <input type="checkbox" onchange="checkAllSelected()" name="sizes[]" value="S"
+                                        class="selectgroup-input">
                                     <span class="selectgroup-button">S</span>
                                 </label>
                                 <label class="selectgroup-item">
-                                    <input type="checkbox" onchange="checkAllSelected()" name="sizes[]" value="L" class="selectgroup-input">
+                                    <input type="checkbox" onchange="checkAllSelected()" name="sizes[]" value="L"
+                                        class="selectgroup-input">
                                     <span class="selectgroup-button">L</span>
                                 </label>
                                 <label class="selectgroup-item">
-                                    <input type="checkbox" onchange="checkAllSelected()" name="sizes[]" value="M" class="selectgroup-input">
+                                    <input type="checkbox" onchange="checkAllSelected()" name="sizes[]" value="M"
+                                        class="selectgroup-input">
                                     <span class="selectgroup-button">Medium</span>
                                 </label>
                                 <label class="selectgroup-item">
-                                    <input type="checkbox" onchange="checkAllSelected()" name="sizes[]" value="XL" class="selectgroup-input">
+                                    <input type="checkbox" onchange="checkAllSelected()" name="sizes[]" value="XL"
+                                        class="selectgroup-input">
                                     <span class="selectgroup-button">XL</span>
                                 </label>
 
                                 <label class="selectgroup-item">
-                                    <input type="checkbox" onchange="checkAllSelected()" name="sizes[]" value="XXL" class="selectgroup-input">
+                                    <input type="checkbox" onchange="checkAllSelected()" name="sizes[]" value="XXL"
+                                        class="selectgroup-input">
                                     <span class="selectgroup-button">XXL</span>
                                 </label>
 
                                 <label class="selectgroup-item" id="all-selected">
-                                    <input type="checkbox" onchange="selectAll(event)"s
-                                        class="selectgroup-input">
+                                    <input type="checkbox" onchange="selectAll(event)"s class="selectgroup-input">
                                     <span class="selectgroup-button">All</span>
                                 </label>
 
@@ -204,18 +213,39 @@
                         </div>
                     </div>
                     <div class="col-12 col-lg-6 img-input">
-                        <input type="file" name="images[]" id="file-input" multiple onchange="productImagePreview(event)" />
+                        <input type="file" name="images[]" id="file-input" multiple
+                            onchange="productImagePreview(event)" />
                         <label for="file-input">
                             <i class="fa-solid fa-arrow-up-from-bracket"></i>
                             &nbsp; Choose Files To Upload
                         </label>
                     </div>
+                    <div class="col-12 col-lg-6">
+                        <div class="form-group">
+                            <div class="selectgroup selectgroup-pills tagsContainer" id="selectgroup-pills">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <label>Add Tags <span class="text-muted">(optional)</span></label>
+                        <div class="form-group d-flex">
+                            <input id="tag-input" type="text" style="border-radius: 5px 0px 0px 5px"
+                                class="form-control" />
+                            <button class="btn btn-success btn-sm" style="border-radius: 0px 5px 5px 0px"
+                                onclick="addTags()" type="button">Add
+                                Tag</button>
+                        </div>
+                    </div>
                     <div class="col-12 mt-2">
                         <div class="form-group">
                             <textarea name="description" class="summernote-simple" placeholder="Write something to describe about the prouct..."></textarea>
-                            @error('description') <small class="text-danger">{{ $message }}</small>  @enderror
+                            @error('description')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
                     </div>
+
                     <button class="btn btn-primary btn-block col-4 mx-auto">Save</button>
                 </div>
             </form>
@@ -224,4 +254,3 @@
     </section>
     <script src="{{ asset('admin/dist/assets/js/form-assets.js') }}"></script>
 @endsection
-

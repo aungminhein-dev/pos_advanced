@@ -3,7 +3,10 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1 class="section-title">Edit Category</h1>
+            <div class="section-header-back">
+                <a href="{{ route('category.list') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <h1>Edit Category</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
                 <div class="breadcrumb-item"><a href="#">Category</a></div>
@@ -44,8 +47,8 @@
 
                             <div class="form-group">
                                 <label>Content</label>
-                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" rows="9"
-                                    cols="">{{ $category->description }}</textarea>
+                                <textarea name="description" class="form-control summernote-simple @error('description') is-invalid @enderror" rows="9"
+                                    cols="">{!! $category->description !!}</textarea>
                                 @error('description')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror

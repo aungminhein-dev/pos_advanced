@@ -84,11 +84,10 @@ class CategoryController extends Controller
     {
         return [
             'name' => $request->name,
-            'description' => strip_tags($request->description),
+            'description' =>$request->description,
             'slug' => strtolower(str_replace(' ', '-', $request->name))
         ];
     }
-
     private function uploadImage($request, &$data)
     {
         if ($request->hasFile('image')) {

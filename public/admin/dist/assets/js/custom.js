@@ -7,13 +7,10 @@ window.addEventListener("load", () => {
 
     const darkModeSwitch = document.querySelector('.dark-mode-switch input');
 
-    // Retrieve the user's dark mode preference from localStorage
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
 
-    // Set the initial state of the dark mode switch
     darkModeSwitch.checked = isDarkMode;
 
-    // Apply dark mode styles if the switch is on
     if (isDarkMode) {
         toggleDarkModeStyles();
     }
@@ -26,7 +23,7 @@ window.addEventListener("load", () => {
     });
 
     function toggleDarkModeStyles() {
-        const elementsToToggle = ['.main-sidebar', '#app', 'section', '.section .section-header', '.section .section-body', '.card','.not-found'];
+        const elementsToToggle = ['.main-sidebar', '#app', 'section','input[type="text"]','input[type="file"]','input[type="color"]','input[type="number"]','select','textarea','.dropdown', '.section .section-header', '.section .section-body', '.card','.not-found'];
 
         elementsToToggle.forEach(selector => {
             const elements = document.querySelectorAll(selector);

@@ -19,9 +19,8 @@
                     <tr>
 
                         <th>Product Name</th>
-                        <th>Category</th>
                         <th>Images</th>
-                        <th>Date</th>
+                        <th>Quantity</th>
                         <th>Price</th>
                         <th>Action</th>
                     </tr>
@@ -30,21 +29,13 @@
 
                             <td>{{ $product->name }}</td>
                             <td>
-                                {{-- @foreach ($product->colours as $colour)
-                                    <span class="square"
-                                        style="background-color: {{ $colour->colour }}"></span>
-                                @endforeach --}}
-                                {{ $product->category->name }} : {{ $product->subCategory->name }}
-                            </td>
-                            <td>
                                 @foreach ($product->images as $image)
                                     <img alt="image" src="{{ asset($image->image_path) }}" class="rounded-circle"
                                         width="35" data-toggle="tooltip" title="Wildan Ahdian">
                                 @endforeach
                             </td>
-                            <td>{{ $product->created_at->format('j-F-Y') }} @if ($product->arrival_status == 'New')
-                                    <div class="badge badge-success">{{ $product->arrival_status }}</div>
-                                @endif
+                            <td>
+                                <span class="badge badge-warning">{{ $product->quantity }}</span>
                             </td>
                             <td>
                                 {{ $product->price }}
