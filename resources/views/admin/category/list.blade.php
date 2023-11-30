@@ -32,7 +32,7 @@
                                     <x-alert type="primary" message=" {{ session('updateSuccessMessage') }}"></x-alert>
                                 @endif
                                 @if (session('deleteSuccessMessage'))
-                                    <x-alert type="primary" message=" {{ session('deleteSuccessMessage') }}"></x-alert>
+                                    <x-alert type="danger" message=" {{ session('deleteSuccessMessage') }}"></x-alert>
                                 @endif
 
                                 <table class="table table-striped mb-0">
@@ -66,11 +66,13 @@
                                                 </td>
                                                 <td>
                                                     <a href="#" class="font-weight-600"><img
-                                                            src="{{ asset($category->image) }}" alt="avatar"
-                                                            width="50" class="rounded">
-                                                    </a>
+                                                        src="{{ asset($category->image->image_path) }}" alt="avatar"
+                                                        width="50" class="rounded">
+                                                </a>
+
                                                 </td>
-                                                <td>{!! Str::limit($category->description, 20, '...') !!}</td>
+                                              <td>{!! Str::words($category->description, 15, '...') !!}</td>
+
                                                 <td>
                                                     <a href="{{ route('category.edit', $category->slug) }}"
                                                         class="btn btn-primary btn-action mr-1" data-toggle="tooltip"
@@ -96,7 +98,7 @@
                                 <p class="lead">
                                     Sorry we can't find any data, to get rid of this message, make at least 1 entry.
                                 </p>
-                                <a href="{{ route('category.add') }}" class="btn btn-primary mt-4">Create new One</a>
+                                <a href="{{ route('category.addPage') }}" class="btn btn-primary mt-4">Create new One</a>
                                 <a href="#" class="mt-4 bb">Need Help?</a>
                             </div>
                         </div>

@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Tag;
+use App\Models\Size;
 use App\Models\Brand;
+use App\Models\Event;
+use App\Models\Colour;
 use App\Models\Category;
-use App\Models\ProductTag;
-use App\Models\ProductSize;
+use App\Models\Discount;
 use App\Models\SubCategory;
 use App\Models\ProductImage;
-use App\Models\ProductColour;
-use App\Models\ProductDiscount;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -17,7 +18,7 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'quantity', 'price', 'rating', 'sub_category_id','slug','view_count'];
+    protected $fillable = ['name', 'description', 'quantity', 'price', 'rating', 'sub_category_id','slug','view_count','brand_id'];
 
 
 
@@ -38,38 +39,41 @@ class Product extends Model
         );
     }
 
-
-
     public function sizes()
     {
-        return $this->hasMany(ProductSize::class);
+        return $this->hasMany(Size::class);
     }
 
     // colour relatonships
     public function colours()
     {
-        return $this->hasMany(ProductColour::class);
+        return $this->hasMany(Colour::class);
     }
 
     // image relationship
     public function images()
     {
-        return $this->hasMany(ProductImage::class);
+        return $this->morphMany(Image::class,'imageable');
     }
 
     // discounts
     public function discount()
     {
-        return $this->hasOne(ProductDiscount::class,'product_id','id');
+        return $this->hasOne(Discount::class);
     }
 
     public function tags()
     {
-        return $this->hasMany(ProductTag::class);
+        return $this->morphMany(Tag::class,'taggable');
     }
 
     public function brand()
     {
         return $this->belongsTo(Brand::class);
+    }
+
+    public function events()
+    {
+        return $this->belongsToMany(Event::class);
     }
 }

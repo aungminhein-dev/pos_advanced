@@ -19,11 +19,14 @@
     </style>
     <section class="section">
         <div class="section-header">
-            <h1 class="section-title">More about {{ $product->name }}</h1>
+            <div class="section-header-back">
+                <a href="#" onclick="history.back()" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <h1>More About {{ $product->name }}</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
                 <div class="breadcrumb-item"><a href="#">Product</a></div>
-                <div class="breadcrumb-item">Detail </div>
+                <div class="breadcrumb-item">Details </div>
             </div>
         </div>
         <div class="section-body">
@@ -73,11 +76,13 @@
                                             </ul>
                                         </div>
                                         <div class="details col-md-6">
-                                            <h2 class="section-title text-muted">{{ $product->name }} (<a
-                                                    href="{{ route('product.edit', $product->slug) }}"><i
-                                                        class="fas fa-pencil-alt"></i>edit</a>)</h2>
+                                            <h2 class="section-title text-muted">{{ $product->name }} ({{ $product->brand->name }})</h2>
                                             <div class="">
                                                 {!! $product->description !!}
+                                                <a
+                                                href="{{ route('product.edit', $product->slug) }}"><i
+                                                    class="fas fa-pencil-alt"></i>edit</a>
+
                                             </div>
                                             @if ($product->discount)
                                                 <div class="mt-2">
@@ -106,7 +111,7 @@
                                                 </div>
                                                 <div class="col-auto">20 reviews</div>
                                             </div>
-                                            <div class="mt-5">
+                                            <div class="mt-2">
                                                 @foreach ($product->colours as $colour)
                                                     <span class="circle" style="background : {{ $colour->colour }}"></span>
                                                 @endforeach
@@ -130,16 +135,11 @@
 
                                             </div>
                                             <div class="mt-2">
-                                                <h4>Tags</h4>
                                                 @foreach ($product->tags as $tag)
-                                                    @php
-                                                        $colorArray = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
-                                                        $indexer = $loop->index % count($colorArray);
-                                                        $color = $colorArray[$indexer];
-                                                    @endphp
-                                                    <span class="mt-2 badge badge-{{ $color }}">{{ $tag->tag }}
+
+                                                    <span class="mt-2 badge badge-light">{{ $tag->tag }}
                                                         <a
-                                                            href="{{ route('sub-category.delete', $product->subCategory->id) }}"><i
+                                                            href="{{ route('tag.delete', $tag->id) }}"><i
                                                                 class="fa-solid fa-xmark"
                                                                 style="color: rgb(206, 183, 9)"></i></a>
                                                     </span>
@@ -181,17 +181,25 @@
 
                                         </div>
                                     @else
-                                        <h2 class="badge badge-warning">Not discounted.</h2>
-                                        <div class="mt-2">Original Price :
-                                            <span class="price">{{ $product->price }}</span> Kyats
+                                        <input type="hidden" value="{{ $product->id }}" id="product-id">
+                                        <input type="hidden" value="{{ $product->price }}" id="product-price">
+                                        <div class="mt-2">
+                                            The original price : <span
+                                                class="originalPriceBox"><del>{{ $product->price }}</del>
+                                                Kyats</span>
                                         </div>
-                                        <div class="col-6 col-sm-12">
+                                        <div class="mt-2 current-price">
+                                        </div>
+                                        <h2 class="badge badge-warning" id="current-discount">Not discounted.</h2>
+                                        <div class="col-6 col-sm-12" id="edit">
                                             <input type="number" class="form-control" id="percentage"
                                                 placeholder="Fill a percentage">
-                                            <button type="button" class="btn btn-success"
-                                                onclick="save('create')">Save</button>
-                                            <button type="reset" class="btn btn-danger"
-                                                onclick="formClear()">Cancel</button>
+                                                <div class="mt-2">
+                                                    <button type="button" class="btn btn-success"
+                                                        onclick="save('create')">Save</button>
+                                                    <button type="reset" class="btn btn-danger"
+                                                        onclick="formClear()">Cancel</button>
+                                                </div>
                                         </div>
                                     @endif
                                 </div>

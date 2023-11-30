@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_colours', function (Blueprint $table) {
+        Schema::create('discount_event', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->string('colour');
+            $table->foreignId('event_id')->constrained('events');
+            $table->foreignId('discount_id')->constrained('discounts');
+            // Add any additional columns you may need in the pivot table
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_colours');
+        Schema::dropIfExists('discount_event');
     }
 };

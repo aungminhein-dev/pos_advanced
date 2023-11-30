@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('product_discounts', function (Blueprint $table) {
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+        Schema::create('images', function (Blueprint $table) {
+            $table->id();
+            $table->morphs('imageable');
+            $table->string('image_path');
+            $table->bigInteger('view_count')->default(0);
+            $table->timestamps();
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('product_discounts', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('images');
     }
 };

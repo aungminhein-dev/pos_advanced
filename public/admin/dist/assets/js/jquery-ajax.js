@@ -42,7 +42,7 @@ $(document).ready(function () {
 
     deleteButton.click(() => {
         $.ajax({
-            url: '/admin/product/delete/image',
+            url: '/admin/products/delete/images',
             method: 'post',
             data: { 'imagesId': imagesIds },
             success: (response) => {
@@ -55,7 +55,7 @@ $(document).ready(function () {
                     deleteButton.hide();
                 }
             },
-            error: (error) => {
+            error : function(error){
                 console.log(error);
             }
         });

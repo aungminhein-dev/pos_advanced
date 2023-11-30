@@ -283,35 +283,43 @@
                                 href="{{ route('admin.dashboard') }}" class="nav-link"><i
                                     class="fas fa-fire"></i><span> Dashboard</span></a></li>
                         <li class="menu-header">Starter</li>
-                        <li class="dropdown {{ request()->is('admin/category/*') ? 'active' : '' }}">
+                        <li class="dropdown {{ request()->is('admin/categories/*') ? 'active' : '' }}">
                             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
                                     class="fas fa-th"></i> <span>Categories</span></a>
                             <ul class="dropdown-menu">
-                                <li class="{{ request()->is('admin/category/list') ? 'active' : '' }}"><a
+                                <li class="{{ request()->is('admin/categories/list') ? 'active' : '' }}"><a
                                         class="nav-link" href="{{ route('category.list') }}">Categories List</a></li>
-                                <li class=" {{ request()->is('admin/category/add/page') ? 'active' : '' }}"><a
+                                <li class=" {{ request()->is('admin/categories/add/page') ? 'active' : '' }}"><a
                                         class="nav-link" href="{{ route('category.addPage') }}">+ Add Category</a>
                                 </li>
                             </ul>
                         </li>
 
-                        <li class="dropdown {{ request()->is('admin/product/*') ? 'active' : '' }}">
+                        <li class="dropdown {{ request()->is('admin/products/*') ? 'active' : '' }}">
                             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
                                     class="fa-solid fa-bag-shopping"></i><span>Products</span></a>
                             <ul class="dropdown-menu">
-                                <li class="{{ request()->is('admin/product/list') ? 'active' : '' }}"><a
+                                <li class="{{ request()->is('admin/products/list') ? 'active' : '' }}"><a
                                         class="nav-link" href="{{ route('product.list') }}">Products List</a></li>
-                                <li class=" {{ request()->is('admin/product/add/page') ? 'active' : '' }}"><a
+                                <li class=" {{ request()->is('admin/products/add/page') ? 'active' : '' }}"><a
                                         class="nav-link" href="{{ route('product.addPage') }}">+ Add Product</a>
                                 </li>
                             </ul>
                         </li>
-                        <li class="dropdown">
+                        <li class="dropdown {{ request()->is('admin/brands/*') ? 'active' : '' }}">
                             <a href="#" class="nav-link has-dropdown"><i class="ion-ios-pricetags"></i>
                                 <span>Brands</span></a>
                             <ul class="dropdown-menu">
-                                <li><a class="nav-link {{ request()->is('admin/brand/list') ? 'active' : '' }}" href="{{ route('brand.list') }}">Brands</a></li>
-                                <li><a class="nav-link {{ request()->is('admin/brand/add/page') ? 'active' : '' }}" href="{{ route('brand.addPage') }}">+ Add New Brand</a></li>
+                                <li class=" {{ request()->is('admin/brands/list') ? 'active' : '' }}"><a class="nav-link" href="{{ route('brand.list') }}">Brands</a></li>
+                                <li><a class="nav-link {{ request()->is('admin/brands/add/page') ? 'active' : '' }}" href="{{ route('brand.addPage') }}">+ Add New Brand</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown {{ request()->is('admin/events/*') ? 'active' : '' }}">
+                            <a href="#" class="nav-link has-dropdown"><i class="fa-solid fa-calendar-days"></i>
+                                <span>Events</span></a>
+                            <ul class="dropdown-menu">
+                                <li class="{{ request()->is('admin/events/list') ? 'active' : '' }}"><a class="nav-link " href="{{ route('event.list') }}">Events</a></li>
+                                <li class="{{ request()->is('admin/events/add/page') ? 'active' : '' }}"><a class="nav-link" href="{{ route('event.addPage') }}">+ Add New Event</a></li>
                             </ul>
                         </li>
                     </ul>

@@ -27,7 +27,6 @@ const form = document.getElementById('edit'); // Replace 'your-form-id' with the
 
 const showForm = () => {
     form.classList.toggle('d-none');
-    productId = document.getElementById('product-id').value;
     discountId = document.getElementById('discount-id').value;
 };
 
@@ -39,6 +38,8 @@ const formClear = () => {
 const save = (action) => {
     let url;
     let data;
+    productId = document.getElementById('product-id').value;
+
     const originalPriceBox = document.querySelector('.originalPriceBox del');
     const percentageBox = document.getElementById('percentage');
     const currentPrice = document.querySelectorAll('.current-price');
@@ -67,13 +68,15 @@ const save = (action) => {
         success: function(response) {
             const discountedPrice = originalPrice - (originalPrice * (response.percentage / 100));
             currentPrice.forEach(element => {
-                element.innerHTML = Math.round(discountedPrice);
+                element.innerHTML = Math.round(discountedPrice) + "Kyats";
             });
             const percentageSpan = document.querySelectorAll('.percentageSpan');
 
             percentageSpan.forEach(element => {
                 element.innerHTML = '(-'+response.percentage+'%)'
             });
+            const currentDiscount = document.getElementById('current-discount');
+            currentDiscount.innerHTML = `Discounted for ${ response.percentage }%`
             formClear();
         },
         error: function(error) {

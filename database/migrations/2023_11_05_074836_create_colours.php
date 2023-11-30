@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_discounts', function (Blueprint $table) {
+        Schema::create('colours', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('percentage');
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->string('colour');
             $table->timestamps();
         });
     }
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_discounts');
+        Schema::dropIfExists('colours');
     }
 };

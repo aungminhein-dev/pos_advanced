@@ -2,177 +2,104 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Models\Tag;
+use App\Models\Brand;
+use App\Models\Image;
+use App\Models\Colour;
 use App\Models\Product;
-use App\Models\ProductSize;
+use App\Models\Category;
+use App\Models\Discount;
+use App\Models\Size;
 use App\Models\SubCategory;
-use App\Models\ProductImage;
 use Illuminate\Http\Request;
-use App\Models\ProductColour;
-use App\Models\ProductTag;
 use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
-    // use withPagination;
-    // product list
     public function list()
     {
         return view('admin.product.list');
     }
 
-    // produt add page
     public function addPage()
     {
         $sub_categories = SubCategory::with('category')->get();
+        $brands = Brand::get();
         $categories = Category::get();
-        return view('admin.product.add-page', compact('sub_categories','categories'));
+        return view('admin.product.add-page', compact('sub_categories', 'categories', 'brands'));
     }
 
-
-    // product add
     public function add(Request $request)
     {
-        $this->validateProductInputs($request);
-        $data = $this->getInputProductData($request);
-        Product::create($data);
-
-        $createdProductId = Product::orderBy('created_at', 'desc')->select('id')->first()->id;
-
-        if($request->images){
-            foreach ($request->images as $image) {
-                $this->uploadImage($image, $createdProductId);
-            }
-        }
-        if($request->sizes){
-            foreach ($request->sizes as $size) {
-                ProductSize::create([
-                    'size' => $size,
-                    'product_id' => $createdProductId
-                ]);
-            }
-        }
-        if($request->colours){
-            foreach ($request->colours as $colour) {
-                ProductColour::create([
-                    'colour' => $colour,
-                    'product_id' => $createdProductId
-                ]);
-            }
-        }
-        if($request->tags){
-            foreach ($request->tags as $tag){
-                ProductTag::create([
-                    'tag' => $tag,
-                    'product_id' => $createdProductId
-                ]);
-            }
-        }
+        $this->validateProductInputs($request, true);
+        $product = Product::create($this->getInputProductData($request));
+        $this->createProductAssets($request, $product->id, 'create');
+        $this->uploadImages($request->images, $product);
         return redirect()->route('product.list')->with('created', 'A new product is created.');
     }
 
-
-    // product detail
     public function detail($slug)
     {
-
-        $product = Product::where('slug', $slug)->with(['subCategory', 'sizes', 'colours', 'images','discount'])->first();
+        $product = Product::where('slug', $slug)->with(['subCategory', 'sizes', 'colours', 'images', 'discount', 'tags'])->first();
         return view('admin.product.detail', compact('product'));
     }
 
-
-    // product edit
     public function edit($slug)
     {
-        $product = Product::where('slug', $slug)->with(['subCategory', 'sizes', 'colours', 'images'])->first();
+        $product = Product::where('slug', $slug)->with(['subCategory', 'sizes', 'colours', 'images', 'brand', 'discount', 'tags'])->first();
         $sub_categories = SubCategory::get();
-        return view('admin.product.edit', compact('product', 'sub_categories'));
+        $brands = Brand::get();
+        $categories = Category::get();
+        return view('admin.product.edit', compact('product', 'sub_categories', 'brands', 'categories'));
     }
 
-    // update
     public function update(Request $request)
     {
         $this->validateProductInputs($request);
+        $product = Product::find($request->productId);
         $data = $this->getInputProductData($request);
-        Product::where('id',$request->productId)->update($data);
-
-        $createdProductId = Product::where('id',$request->productId)->select('id')->first()->id;
-        if($request->images){
-            foreach ($request->images as $image) {
-                $this->uploadImage($image, $createdProductId);
-            }
-        }
-        if($request->sizes){
-            foreach ($request->sizes as $size) {
-                ProductSize::create([
-                    'size' => $size,
-                    'product_id' => $createdProductId
-                ]);
-            }
-        }
-        if($request->colours){
-            foreach ($request->colours as $colour) {
-                ProductColour::create([
-                    'colour' => $colour,
-                    'product_id' => $createdProductId
-                ]);
-            }
-        }
-        if($request->tags){
-            foreach ($request->tags as $tag){
-                ProductTag::create([
-                    'tag' => $tag,
-                    'product_id' => $createdProductId
-                ]);
-            }
-        }
-        return redirect()->route('product.list')->with('updated', 'A new product is updated.');
+        $product->update($data);
+        $this->createProductAssets($request, $product->id, 'update');
+        $this->uploadImages($request->images, $product);
+        return redirect()->route('product.list')->with('updated', 'A product is updated.');
     }
 
-
-    // product delete
     public function delete(Request $request)
     {
-        $product = Product::where('id',$request->id)->with('images')->first();
-        foreach($product->images as $image){
-            $this->deleteProductImage($image->image_path);
-        }
+        $product = Product::with('images')->find($request->id);
+        $this->deleteProductImages($product->images);
         $product->delete();
-        return redirect()->route('product.list')->with('deleted', 'A new product is deleted.');
+        return redirect()->route('product.list')->with('deleted', 'A product is deleted.');
     }
 
-    // delete Image
     public function deleteImage(Request $request)
     {
+        $message = "Image not found!";
+
         foreach ($request->imagesId as $id) {
-            $image = ProductImage::where('id', $id)->first();
-            $imageName = $image->image_path;
-            if ($imageName && File::exists($imageName)) {
-                File::delete($imageName);
+            $image = Image::find($id);
+            if (File::exists($image->image_path)) {
+                File::delete($image->image_path);
                 $message = "Images are deleted";
-            } else {
-                $message = "Image not found!";
             }
             $image->delete();
         }
-        return  response()->json($message, 200);
+        return response()->json($message, 200);
     }
 
-
-
-    // validate data
-    private function validateProductInputs($request)
+    private function validateProductInputs($request, $imageIsRequired = false)
     {
-        $request->validate([
-            'name' => 'required|unique:products,name,'.$request->productId,
+        $rules = $request->validate([
+            'name' => 'required|unique:products,name,' . $request->productId,
             'description' => 'required',
             'price' => 'required',
             'subCategories' => 'required',
             'quantity' => 'required',
+            'brand' => 'required',
+            'images.*' => $imageIsRequired ? 'required|mimes:png,jpg,webp,gif,jpeg' : 'sometimes|mimes:png,jpg,webp,gif,jpeg',
         ]);
     }
 
-    // request data
     private function getInputProductData($request)
     {
         return [
@@ -182,27 +109,96 @@ class ProductController extends Controller
             'sub_category_id' => $request->subCategories,
             'quantity' => $request->quantity,
             'slug' => strtolower(str_replace(' ', '-', $request->name)),
-            'view_count' => 0
+            'brand_id' => $request->brand,
         ];
+    }
+
+    private function uploadImages($images, $product)
+    {
+        if ($images) {
+            foreach ($images as $image) {
+                $imagePath = $this->uploadImage($image, $product->id);
+                $product->images()->create(['image_path' => $imagePath]);
+            }
+        }
     }
 
     private function uploadImage($image, $productId)
     {
-        if ($image->isValid()) {
-            $filePath = 'storage/product/' . uniqid() . $image->getClientOriginalName();
-            $filePathToBeSaved = str_replace('storage/', '', $filePath);
-            $image->storeAs('public', $filePathToBeSaved);
-            ProductImage::create([
-                'image_path' => $filePath,
-                'product_id' => $productId
-            ]);
+        $filePath = 'storage/product/' . uniqid() . $image->getClientOriginalName();
+        $filePathToBeSaved = str_replace('storage/', '', $filePath);
+        $image->storeAs('public', $filePathToBeSaved);
+        return $filePath;
+    }
+
+    private function deleteProductImages($images)
+    {
+        foreach ($images as $image) {
+            $this->deleteImagePrivate($image->image_path);
         }
     }
 
-    private function deleteProductImage($image)
+    private function deleteImagePrivate($image)
     {
         if (File::exists($image)) {
             File::delete($image);
+        }
+    }
+
+    private function createProductAssets($request, $createdProductId, $action)
+    {
+        $this->createSizes($request->sizes, $createdProductId);
+        $this->createColours($request->colours, $createdProductId);
+        $this->createTags($request->tags, $createdProductId);
+        $this->createDiscount($request, $createdProductId, $action);
+    }
+
+    private function createSizes($sizes, $productId)
+    {
+        if ($sizes) {
+            foreach ($sizes as $size) {
+                Size::create(['size' => $size, 'product_id' => $productId]);
+            }
+        }
+    }
+
+    private function createColours($colours, $productId)
+    {
+        if ($colours) {
+            foreach ($colours as $colour) {
+                Colour::create(['colour' => $colour, 'product_id' => $productId]);
+            }
+        }
+    }
+
+    private function createTags($newTags, $productId)
+    {
+        if ($newTags) {
+            $product = Product::find($productId);
+            $uniqueTags = collect($newTags)->unique();
+            foreach ($uniqueTags as $tagName) {
+                $product->tags()->firstOrCreate(['tag' => $tagName]);
+            }
+        }
+    }
+
+    private function createDisCount($request, $productId, $action)
+    {
+        if ($request->discount && $action == "create") {
+            Discount::create([
+                'percentage' => $request->discount,
+                'product_id' => $productId,
+                'start_date' => $request->startDate,
+                'end_date' => $request->endDate
+            ]);
+        }
+
+        if ($request->discount && $action = "update") {
+            Discount::where('id', $productId)->update([
+                'percentage' => $request->discount,
+                'start_date' => $request->startDate,
+                'end_date' => $request->endDate
+            ]);
         }
     }
 }

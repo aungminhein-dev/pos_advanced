@@ -47,10 +47,13 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1 class="section-title">Edit product</h1>
+            <div class="section-header-back">
+                <a href="#" onclick="history.back()" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <h1>Edit {{ $product->name }}'s Details</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                <div class="breadcrumb-item"><a href="#">product</a></div>
+                <div class="breadcrumb-item"><a href="#">Product</a></div>
                 <div class="breadcrumb-item">Edit </div>
             </div>
         </div>
@@ -78,18 +81,34 @@
             @endif
             <form action="{{ route('product.update') }}" method="post" enctype="multipart/form-data">
                 @csrf
+                <div class="previews-container">
+                </div>
                 <div class="row">
-
-                    <div class="previews-container">
-                    </div>
                     <input type="hidden" value="{{ $product->id }}" name="productId">
 
-                    <div class="col-12">
+                    <div class="col-12 col-lg-6">
                         <div class="form-group">
-                            <label>Product Name</label>
+                            <label>Product Name <span class="text-danger">*</span></label>
                             <input type="text" value="{{ $product->name }}" name="name"
-                                placeholder="Enter produt name" class="form-control">
+                                placeholder="Enter produt name"
+                                class="form-control @error('name')  'is-invalid'  @enderror">
                             @error('name')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="form-group">
+                            <label>Brand <span class="text-danger">*</span></label>
+                            <select class="form-control selectric" name="brand">
+                                <option disabled selected>Select Brand</option>
+                                @foreach ($brands as $brand)
+                                    <option value="{{ $brand->id }}" @if ($product->brand->id == $brand->id) selected @endif>
+                                        {{ $brand->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('brand')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
@@ -117,14 +136,14 @@
                     <div class="col-12 col-lg-6">
                         <label for="">Category</label>
                         <select class="form-control selectric" onchange="addSubCategory(event)" name="subCategories">
-                            <option disabled selected>Select sub-category</option>
+                            <option>Select Category</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">
+                                <option @if ($product->category->id == $category->id) selected @endif value="{{ $category->id }}">
                                     {{ $category->name }}
                                 </option>
                             @endforeach
                         </select>
-                        @error('subCategories')
+                        @error('category')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
@@ -133,18 +152,17 @@
                             <label>Sub-Category <span class="text-danger">*</span></label>
                             <select class="form-control selectric" id="subCategories" name="subCategories">
                                 <option disabled selected>Select sub-category</option>
+                                @foreach ($sub_categories as $c)
+                                    <option @if ($product->subCategory->id == $c->id) selected @endif value="{{ $c->id }}">
+                                        {{ $c->name }}</option>
+                                        {{-- <option value="">{{ $c->name }}</option> --}}
+                                @endforeach
                             </select>
                             @error('subCategories')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                     </div>
-                    <div class="col-12 col-lg-6">
-                        <label for="">Category</label>
-                        <input type="text" id="categoryInput" value="" name="" class="form-control"
-                            disabled>
-                    </div>
-
                     <div class="col-12 col-lg-6">
                         <div class="form-group">
                             <label class="form-label">Color Input</label>
@@ -157,7 +175,8 @@
                                 </div>
                                 <div class="col-auto">
                                     <label class="colorinput">
-                                        <input name="colours[]" type="checkbox" value="#6c757d" class="colorinput-input" />
+                                        <input name="colours[]" type="checkbox" value="#6c757d"
+                                            class="colorinput-input" />
                                         <span class="colorinput-color bg-secondary"></span>
                                     </label>
                                 </div>
@@ -280,7 +299,13 @@
                     <div class="col-12 col-lg-6">
                         <div class="form-group">
                             <div class="selectgroup selectgroup-pills tagsContainer" id="selectgroup-pills">
-
+                                @foreach ($product->tags as $tag)
+                                    <label class="selectgroup-item">
+                                        <input type="checkbox" checked value="{{ $tag->id }}"
+                                            class="selectgroup-input">
+                                        <span class="selectgroup-button">{{ $tag->tag }}</span>
+                                    </label>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -294,6 +319,31 @@
                                 Tag</button>
                         </div>
                     </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>Discount By % <span class="text-muted">(optional)</span></label>
+                            <input type="number"
+                                @if ($product->discount) value="{{ $product->discount->percentage }}" @else value="0" @endif
+                                name="discount" oninput="toggleCalendar()" placeholder="Enter percentage for discount" class="form-control">
+                        </div>
+                    </div>
+
+                    <div id="calendar" class="d-none row">
+                        <div class="col-12 col-lg-6 ">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <input type="date" class="form-control" name="startDate">
+                            </div>
+
+
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <input type="date" class="form-control" name="endDate">
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-12 mt-2">
                         <div class="form-group">
                             <textarea name="description" class="summernote-simple" placeholder="Write something to describe about the prouct...">{!! $product->description !!}</textarea>
@@ -302,16 +352,16 @@
                             @enderror
                         </div>
                     </div>
-                    <button class="btn btn-primary btn-block col-4 mx-auto">Save</button>
+                    <button class="btn btn-primary btn-block ">Save</button>
                 </div>
             </form>
         </div>
         </div>
     </section>
     <script src="{{ asset('admin/dist/assets/js/form-assets.js') }}"></script>
-
 @endsection
 @section('myScript')
+
     <script>
         $('.owl-carousel').owlCarousel({
             loop: false,

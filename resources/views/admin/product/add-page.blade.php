@@ -1,6 +1,8 @@
 @extends('admin.layout.app')
 @section('title', 'Add Product')
 @section('myCss')
+    <link rel="stylesheet"
+        href="{{ asset('admin/dist/assets/modules/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}">
 
     <style>
         .img-input input[type="file"] {
@@ -47,21 +49,25 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1 class="section-title">Add product</h1>
+            <div class="section-header-back">
+                <a href="#" onclick="history.back()" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <h1>Add New Product</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                <div class="breadcrumb-item"><a href="#">product</a></div>
-                <div class="breadcrumb-item">Add </div>
+                <div class="breadcrumb-item"><a href="#">Product</a></div>
+                <div class="breadcrumb-item">Add</div>
             </div>
         </div>
 
         <div class="section-body">
             <form action="{{ route('product.add') }}" method="post" enctype="multipart/form-data">
                 @csrf
-                <div class="row">
-                    <div class="previews-container"></div>
+                <div class="previews-container"></div>
 
-                    <div class="col-12">
+                <div class="row">
+
+                    <div class="col-12 col-lg-6">
                         <div class="form-group">
                             <label>Product Name <span class="text-danger">*</span></label>
                             <input type="text" name="name" placeholder="Enter produt name"
@@ -71,6 +77,22 @@
                             @enderror
                         </div>
                     </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="form-group">
+                            <label>Brand <span class="text-danger">*</span></label>
+                            <select class="form-control selectric" name="brand">
+                                <option disabled selected>Select Brand</option>
+                                @foreach ($brands as $brand)
+                                    <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('brand')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
+
                     <div class="col-12 col-lg-6">
                         <div class="form-group">
                             <label>Available Quantity <span class="text-danger">*</span></label>
@@ -147,7 +169,8 @@
                                 </div>
                                 <div class="col-auto">
                                     <label class="colorinput">
-                                        <input name="colours[]" type="checkbox" value="#17a2b8" class="colorinput-input" />
+                                        <input name="colours[]" type="checkbox" value="#17a2b8"
+                                            class="colorinput-input" />
                                         <span class="colorinput-color bg-info"></span>
                                     </label>
                                 </div>
@@ -171,7 +194,6 @@
                                 Colour</button>
                         </div>
                     </div>
-
 
                     <div class="col-12 col-lg-6">
                         <div class="form-group">
@@ -219,11 +241,13 @@
                             <i class="fa-solid fa-arrow-up-from-bracket"></i>
                             &nbsp; Choose Files To Upload
                         </label>
+                        @error('images')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
                     </div>
                     <div class="col-12 col-lg-6">
                         <div class="form-group">
                             <div class="selectgroup selectgroup-pills tagsContainer" id="selectgroup-pills">
-
                             </div>
                         </div>
                     </div>
@@ -237,6 +261,32 @@
                                 Tag</button>
                         </div>
                     </div>
+
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>Discount By %<span class="text-muted">(optional)</span></label>
+                            <input type="number" oninput="toggleCalendar()" name="discount"
+                                placeholder="Enter percentage for discount" class="form-control">
+                        </div>
+                    </div>
+                    <div id="calendar" class="d-none row">
+                        <div class="col-12 col-lg-6 ">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <input type="date" class="form-control" name="startDate">
+                            </div>
+
+
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <input type="date" class="form-control" name="endDate">
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div class="col-12 mt-2">
                         <div class="form-group">
                             <textarea name="description" class="summernote-simple" placeholder="Write something to describe about the prouct..."></textarea>
@@ -246,7 +296,7 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-primary btn-block col-4 mx-auto">Save</button>
+                    <button class="btn btn-primary">Save</button>
                 </div>
             </form>
         </div>

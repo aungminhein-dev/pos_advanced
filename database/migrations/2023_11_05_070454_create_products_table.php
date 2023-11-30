@@ -21,10 +21,12 @@ return new class extends Migration
             $table->integer('rating')->nullable();
             $table->string('slug')->unique();
             $table->timestamps();
+            $table->unsignedBigInteger('view_count')->default(0);
+            $table->foreignId('brand_id')->constrained('brands')->onDelete('cascade');
             $table->foreignId('sub_category_id')->constrained('sub_categories')->onDelete('cascade');
-
         });
     }
+
     /**
      * Reverse the migrations.
      */

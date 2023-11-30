@@ -6,7 +6,7 @@ use App\Traits\Productable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ProductColour extends Model
+class Colour extends Model
 {
     use HasFactory;
     use Productable;

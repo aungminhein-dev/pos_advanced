@@ -113,7 +113,7 @@
                                 <div class="col-12 sm-grid-content mb-30">
                                     <div class="post-thumb d-flex border-radius-5 img-hover-scale mb-15">
                                         <a href="blog-details.html">
-                                            <img src="assets/imgs/blog/blog-1.jpg" alt="">
+                                            <img src="{{asset('user/assets/imgs/blog/blog-1.jpg')}}" alt="">
                                         </a>
                                     </div>
                                     <div class="post-content media-body">
@@ -128,7 +128,7 @@
                                 <div class="col-md-6 col-sm-6 sm-grid-content mb-30">
                                     <div class="post-thumb d-flex border-radius-5 img-hover-scale mb-15">
                                         <a href="blog-details.html">
-                                            <img src="assets/imgs/blog/blog-3.jpg" alt="">
+                                            <img src="{{asset('user/assets/imgs/blog/blog-3.jpg')}}" alt="">
                                         </a>
                                     </div>
                                     <div class="post-content media-body">
@@ -143,7 +143,7 @@
                                 <div class="col-md-6 col-sm-6 sm-grid-content mb-30">
                                     <div class="post-thumb d-flex border-radius-5 img-hover-scale mb-15">
                                         <a href="blog-details.html">
-                                            <img src="assets/imgs/blog/blog-4.jpg" alt="">
+                                            <img src="{{asset('user/assets/imgs/blog/blog-4.jpg')}}" alt="">
                                         </a>
                                     </div>
                                     <div class="post-content media-body">
@@ -158,7 +158,7 @@
                                 <div class="col-md-6 col-sm-6 sm-grid-content mb-30">
                                     <div class="post-thumb d-flex border-radius-5 img-hover-scale mb-15">
                                         <a href="blog-details.html">
-                                            <img src="assets/imgs/blog/blog-5.jpg" alt="">
+                                            <img src="{{asset('user/assets/imgs/blog/blog-5.jpg')}}" alt="">
                                         </a>
                                     </div>
                                     <div class="post-content media-body">
@@ -173,7 +173,7 @@
                                 <div class="col-md-6 col-sm-6 sm-grid-content mb-30">
                                     <div class="post-thumb d-flex border-radius-5 img-hover-scale mb-15">
                                         <a href="blog-details.html">
-                                            <img src="assets/imgs/blog/blog-6.jpg" alt="">
+                                            <img src="{{asset('user/assets/imgs/blog/blog-6.jpg')}}" alt="">
                                         </a>
                                     </div>
                                     <div class="post-content media-body">
@@ -189,7 +189,7 @@
                         </div>
                         <!--Widget ads-->
                         <div class="banner-img wow fadeIn mb-45 animated d-lg-block d-none animated">
-                            <img src="assets/imgs/banner/banner-11.jpg" alt="">
+                            <img src="{{asset('user/assets/imgs/banner/banner-11.jpg')}}" alt="">
                             <div class="banner-text">
                                 <span>Women Zone</span>
                                 <h4>Save 17% on <br>Office Dress</h4>

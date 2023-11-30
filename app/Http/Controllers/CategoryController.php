@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
 use App\Models\Category;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
@@ -11,8 +12,7 @@ class CategoryController extends Controller
 {
     public function list()
     {
-        $categories = Category::withCount('subCategories','products')->get();
-        // dd($categories->toArray());
+        $categories = Category::withCount('subCategories','products')->with('image')->get();
         return view('admin.category.list', compact('categories'));
     }
 
@@ -25,17 +25,24 @@ class CategoryController extends Controller
     public function add(Request $request)
     {
         $this->validateCategory($request, true);
-
         $data = $this->getCategoryData($request);
-        $this->uploadImage($request, $data);
-
-        Category::create($data);
+        $image = $this->uploadImage($request, $data);
+        $category = Category::create($data);
+        if ($image) {
+           $category->image()->create([
+                'image_path' => $image
+            ]);
+        }
+        $category->tag()->create([
+            'tag' => strtolower('#'.str_replace('','-',$category->name))
+        ]);
         return redirect()->route('category.list')->with('createSuccessMessage', 'A new category is created.');
     }
 
     public function delete(Request $request)
     {
-        $category = Category::find($request->category_id);
+        $category = Category::with('image')->find($request->category_id);
+        // dd($category->toArray());
         $this->deleteCategoryImage($category);
         $category->delete();
         return back()->with('deleteSuccessMessage', 'Category deleted successfully.');
@@ -53,14 +60,13 @@ class CategoryController extends Controller
         $this->validateCategory($request);
         $data = $this->getCategoryData($request);
         $this->uploadImage($request, $data);
-
         Category::where('id', $request->categoryId)->update($data);
         return redirect()->route('category.list')->with('updateSuccessMessage', 'A category is updated.');
     }
 
     public function detail($slug)
     {
-        $category = Category::where('slug', $slug)->with('subCategories')->first();
+        $category = Category::where('slug', $slug)->with('subCategories','image','tag')->first();
         return view('admin.category.detail', compact('category'));
     }
 
@@ -94,14 +100,16 @@ class CategoryController extends Controller
             $filePath = 'storage/category/' . uniqid() . $request->file('image')->getClientOriginalName();
             $filePathToBeSaved = str_replace('storage/', '', $filePath);
             $request->image->storeAs('public', $filePathToBeSaved);
-            $data['image'] = $filePath;
+            return $filePath;
         }
+        return null;
+
     }
 
     private function deleteCategoryImage($category)
     {
-        if (File::exists($category->image)) {
-            File::delete($category->image);
+        if (File::exists($category->image->image_path)) {
+            File::delete($category->image->image_path);
         }
     }
 }

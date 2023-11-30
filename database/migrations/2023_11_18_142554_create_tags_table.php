@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->bigInteger('view_count')->default(0);
+        Schema::create('tags', function (Blueprint $table) {
+            $table->id();
+            $table->string('tag');
+            $table->morphs('taggable');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-
-        });
+        Schema::dropIfExists('tags');
     }
 };

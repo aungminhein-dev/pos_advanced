@@ -13,7 +13,10 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1 class="section-title">Product List</h1>
+            <div class="section-header-back">
+                <a href="#" onclick="history.back()" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <h1>Products List</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
                 <div class="breadcrumb-item"><a href="#">Product</a></div>

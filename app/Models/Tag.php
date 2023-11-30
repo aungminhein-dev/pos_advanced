@@ -6,14 +6,14 @@ use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ProductTag extends Model
+class Tag extends Model
 {
     use HasFactory;
-    protected $fillable = ['product_id','tag'];
+    protected $fillable = ['tag'];
 
 
-    public function product()
+    public function taggable()
     {
-        return $this->belongsTo(Product::class);
+        return $this->morphTo();
     }
 }

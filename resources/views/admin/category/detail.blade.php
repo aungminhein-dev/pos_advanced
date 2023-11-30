@@ -24,7 +24,7 @@
                 <div class="row ">
 
                     <div class="col-12 col-lg-6 ">
-                        <img style="max-width:500px;" src="{{ asset($category->image) }}" alt=""
+                        <img style="max-width:500px;" src="{{ asset($category->image->image_path) }}" alt=""
                             class="d-block mx-auto rounded">
 
                     </div>
@@ -36,7 +36,12 @@
                                 {!! $category->description !!}
                             </h6>
                         </div>
+
                        <livewire:admin.sub-category-form :category="$category" :id="$category->id"/>
+                        <div class="">
+                            <h3 class="section-title">Tags</h3>
+                            <span class="badge badge-light">{{ $category->tag->tag }}</span>
+                        </div>
                     </div>
                 </div>
                 <a href="{{ route('category.edit',$category->slug) }}"><i class="fa-solid fa-pencil"></i>edit</a>

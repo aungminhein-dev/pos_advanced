@@ -14,9 +14,9 @@ class PTable extends Component
     {
         $products = collect();
         if(strlen($this->key > 2)){
-            $products = Product::with(['subCategory', 'sizes', 'colours', 'images','tags'])->where('name','like','%'.$this->key.'%')->paginate(2);
+            $products = Product::with(['subCategory', 'sizes', 'colours', 'images','tags','discount'])->where('name','like','%'.$this->key.'%')->paginate(2);
         }else{
-            $products = Product::with(['subCategory', 'sizes', 'colours', 'images'])->paginate(5);
+            $products = Product::with(['subCategory', 'sizes', 'colours', 'images','discount'])->paginate(5);
         }
         return view('livewire.admin.p-table',compact('products'));
     }

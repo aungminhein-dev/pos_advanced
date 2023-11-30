@@ -20,7 +20,7 @@ class SubCategoryForm extends Component
     {
         $this->validate();
         SubCategory::create([
-            'name' => $this->subCategoryName,
+            'name' =>ucwords( $this->subCategoryName),
             'category_id' => $this->id,
             'slug' => strtolower(str_replace(' ','-',$this->subCategoryName))
         ]);

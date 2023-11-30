@@ -38,7 +38,13 @@
                                 <span class="badge badge-warning">{{ $product->quantity }}</span>
                             </td>
                             <td>
-                                {{ $product->price }}
+                                @if ($product->discount)
+                                <del class="text-danger">{{ $product->price }}</del>
+                                <span class="text-success">{{ $product->price - $product->price * ($product->discount->percentage / 100) }}
+                                    Kyats</span>
+                            @else
+                                {{ $product->price }} Kyats
+                            @endif
                             </td>
                             <td><a href="{{ route('product.detail', $product->slug) }}"
                                     class="btn btn-primary">Detail</a>
@@ -65,7 +71,7 @@
                     <p class="lead">
                         Sorry we can't find any data, to get rid of this message, make at least 1 entry.
                     </p>
-                    <a href="{{ route('product.add') }}" class="btn btn-primary mt-4">Create new One</a>
+                    <a href="{{ route('product.addPage') }}" class="btn btn-primary mt-4">Create new One</a>
                     <a href="#" class="mt-4 bb">Need Help?</a>
                 </div>
             </div>

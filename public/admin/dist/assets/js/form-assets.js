@@ -42,35 +42,36 @@ const addColor = () => {
     `);
 }
 
-// change category's input value
 const addSubCategory = (event) => {
     const subCategories = document.getElementById('subCategories');
-    let subCategoriesArray;
+
+    // Clear existing options before making the AJAX request
+    subCategories.innerHTML = '<option disabled selected>Select sub-category</option>';
 
     $.ajax({
-        url: '/admin/sub-category/list',
+        url: '/admin/sub-categories/list',
         method: 'get',
         data: {
             categoryId: event.target.value
         },
         success: function (responses) {
-            subCategoriesArray = responses;
-
-            // Check if subCategoriesArray is empty
-            if (subCategoriesArray.length === 0) {
+            // Check if responses is empty
+            if (responses.length === 0) {
                 // Clear the select box if there is no data
                 subCategories.innerHTML = '<option disabled selected>Select sub-category</option>';
             } else {
                 // Populate the select box if there is data
-                subCategoriesArray.forEach(subCategory => {
+                responses.forEach(subCategory => {
                     subCategories.insertAdjacentHTML('beforeend', `
                         <option value="${subCategory.id}">${subCategory.name}</option>
                     `);
                 });
             }
-        }
+        },
+
     });
 };
+
 
 
 // select all check boxes on a click
@@ -123,6 +124,10 @@ const addTags = () => {
         </label>`
     );
     tagInput.value = '';
+}
+
+const toggleCalendar = () => {
+    document.querySelector('#calendar').classList.remove('d-none');
 }
 
 

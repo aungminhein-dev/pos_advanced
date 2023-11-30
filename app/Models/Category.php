@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Tag;
 use App\Models\Product;
 use App\Models\SubCategory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name','image','description','slug'];
+    protected $fillable = ['name','description','slug'];
 
     public function subCategories()
     {
@@ -21,5 +22,15 @@ class Category extends Model
     public function products()
     {
         return $this->hasManyThrough(Product::class,SubCategory::class,'category_id','sub_category_id','id','id');
+    }
+
+    public function image()
+    {
+        return $this->morphOne(Image::class,'imageable');
+    }
+
+    public function tag()
+    {
+        return $this->morphOne(Tag::class,'taggable');
     }
 }
