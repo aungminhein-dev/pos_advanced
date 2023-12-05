@@ -21,4 +21,9 @@ class Discount extends Model
     {
         return $this->belongsToMany(Product::class)->withTimestamps();
     }
+
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class,'notifiable');
+    }
 }

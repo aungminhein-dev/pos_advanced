@@ -151,6 +151,7 @@ class ProductController extends Controller
         $this->createColours($request->colours, $createdProductId);
         $this->createTags($request->tags, $createdProductId);
         $this->createDiscount($request, $createdProductId, $action);
+        $this->createNotification($request,$createdProductId,$action);
     }
 
     private function createSizes($sizes, $productId)
@@ -200,5 +201,15 @@ class ProductController extends Controller
                 'end_date' => $request->endDate
             ]);
         }
+    }
+
+    private function createNotification($request, $productId, $action)
+    {
+        $product = Product::find($productId);
+        $message = ($product->count() === 1) ? $product->name . " is added to products." : $product->name . " are added to products.";
+        $product->notifications()->create([
+            'title' => $message,
+            'description' => "Lorem ipsum dolor imet"
+        ]);
     }
 }

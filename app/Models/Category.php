@@ -33,4 +33,9 @@ class Category extends Model
     {
         return $this->morphOne(Tag::class,'taggable');
     }
+
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class,'notifiable');
+    }
 }

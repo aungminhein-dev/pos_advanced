@@ -11,32 +11,56 @@ use Illuminate\Http\Request;
 class GuestController extends Controller
 {
 
-    //home
     public function home()
     {
+        // Fetch brands
         $brands = Brand::get();
+
+        // Fetch categories with images
         $categories = Category::with('image')->get();
+
+        // Fetch events with images, products with subCategory, and discounts
         $events = Event::with([
             'image',
-            'products' => function ($query) {
-                $query->with('subCategory');
-            },
+            'products.subCategory',
             'discounts' => function ($query) {
                 $query->select('percentage', 'event_id')
                     ->orderBy('percentage', 'desc');
             },
         ])->get();
-        $products = Product::with('subCategory', 'category', 'discount', 'images')->get()->take(10);
-        $newProducts = Product::with('subCategory','category','discount','images')->where('arrival_status','New')->get()->take(10);
-        $popularProducts = Product::with('subCategory', 'category', 'discount', 'images')->orderBy('view_count', 'desc')->get()->take(10);
+
+        // Fetch top 10 products with subCategory, category, discount, and images
+        $products = Product::with('subCategory', 'category', 'discount', 'images')->take(10)->get();
+
+        // Fetch top 10 new products with subCategory, category, discount, and images
+        $newProducts = Product::with('subCategory', 'category', 'discount', 'images')
+            ->where('arrival_status', 'New')
+            ->take(10)
+            ->get();
+
+        // Fetch top 10 popular products with subCategory, category, discount, and images
+        $popularProducts = Product::with('subCategory', 'category', 'discount', 'images')
+            ->orderBy('view_count', 'desc')
+            ->take(10)
+            ->get();
+
+        // Fetch discounted products with subCategory, category, discount, and images
         $discountedProducts = Product::with(['subCategory', 'category', 'discount', 'images'])
             ->has('discount')
             ->get();
 
-
-        // dd($products->toArray());
-        return view('user.index', compact('brands', 'categories', 'events', 'products', 'popularProducts', 'discountedProducts','newProducts'));
+        // Return view with compacted data
+        return view('user.index', compact(
+            'brands',
+            'categories',
+            'events',
+            'products',
+            'popularProducts',
+            'discountedProducts',
+            'newProducts'
+        ));
     }
+
 
     // about
     public function about()

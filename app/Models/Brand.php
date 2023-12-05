@@ -10,4 +10,9 @@ class Brand extends Model
     use HasFactory;
     protected $fillable = ['name','image'];
 
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class,'notifiable');
+    }
+
 }

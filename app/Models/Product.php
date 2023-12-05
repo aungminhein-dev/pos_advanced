@@ -10,6 +10,7 @@ use App\Models\Colour;
 use App\Models\Category;
 use App\Models\Discount;
 use App\Models\SubCategory;
+use App\Models\Notification;
 use App\Models\ProductImage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -76,4 +77,10 @@ class Product extends Model
     {
         return $this->belongsToMany(Event::class);
     }
+
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class,'notifiable');
+    }
 }
+

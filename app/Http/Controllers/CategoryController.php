@@ -28,6 +28,7 @@ class CategoryController extends Controller
         $data = $this->getCategoryData($request);
         $image = $this->uploadImage($request, $data);
         $category = Category::create($data);
+        $this->createNotification($category->id,'create');
         if ($image) {
            $category->image()->create([
                 'image_path' => $image
@@ -111,5 +112,15 @@ class CategoryController extends Controller
         if (File::exists($category->image->image_path)) {
             File::delete($category->image->image_path);
         }
+    }
+
+    private function createNotification($categoryId, $action)
+    {
+        $category = Category::find($categoryId);
+        $message = ($category->count() === 1) ? $category->name . " is added to categories." : $category->name . " are added to categories.";
+        $category->notifications()->create([
+            'title' => $message,
+            'description' => "Lorem ipsum dolor imet"
+        ]);
     }
 }

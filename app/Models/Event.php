@@ -26,4 +26,9 @@ class Event extends Model
     {
         return $this->belongsToMany(Discount::class);
     }
+
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class,'notifiable');
+    }
 }
