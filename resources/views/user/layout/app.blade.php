@@ -11,14 +11,23 @@
     <meta property="og:type" content="">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('user/assets/imgs/theme/favicon.ico') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('user/assets/css/main.css') }}">
     <link rel="stylesheet" href="{{ asset('user/assets/css/custom.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
-        integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw=="
+    <link rel="stylesheet"
+        href="{{ asset('admin/dist/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('admin/dist/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"
+        integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
@@ -49,6 +58,10 @@
 
         /* Apply the spinning animation to the icon */
         #loader .text-center img {
+            animation: spin 1s infinite linear;
+        }
+
+        .spin {
             animation: spin 1s infinite linear;
         }
     </style>
@@ -116,13 +129,13 @@
                             <ul class="d-flex align-items-center">
                                 @php
                                     $words = explode(' ', Auth::user()->name);
-                                    $firstName = $words[0]
+                                    $firstName = $words[0];
                                 @endphp
                                 <p>{{ $firstName }}</p>
-                                <img class="rounded" src="{{ asset('user/assets/imgs/banner/brand-1.png') }}" width="30" height="30" alt="">
+                                <img class="rounded" src="{{ asset('user/assets/imgs/banner/brand-1.png') }}"
+                                    width="30" height="30" alt="">
                             </ul>
                         </div>
-
                     @endif
                 </div>
             </div>
@@ -149,52 +162,17 @@
                                         <span class="pro-count blue">4</span>
                                     </a>
                                 </div>
-                                <div class="header-action-icon-2">
-                                    <a class="mini-cart-icon" href="cart.html">
-                                        <img alt="Surfside Media"
-                                            src="{{ asset('user/assets/imgs/theme/icons/icon-cart.svg') }}">
-                                        <span class="pro-count blue">2</span>
-                                    </a>
-                                    <div class="cart-dropdown-wrap cart-dropdown-hm2">
-                                        <ul>
-                                            <li>
-                                                <div class="shopping-cart-img">
-                                                    <a href="product-details.html"><img alt="Surfside Media"
-                                                            src="{{ asset('user/assets/imgs/shop/thumbnail-3.jpg') }}"></a>
-                                                </div>
-                                                <div class="shopping-cart-title">
-                                                    <h4><a href="product-details.html">Daisy Casual Bag</a></h4>
-                                                    <h4><span>1 × </span>$800.00</h4>
-                                                </div>
-                                                <div class="shopping-cart-delete">
-                                                    <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="shopping-cart-img">
-                                                    <a href="product-details.html"><img alt="Surfside Media"
-                                                            src="{{ asset('user/assets/imgs/shop/thumbnail-2.jpg') }}"></a>
-                                                </div>
-                                                <div class="shopping-cart-title">
-                                                    <h4><a href="product-details.html">Corduroy Shirts</a></h4>
-                                                    <h4><span>1 × </span>$3200.00</h4>
-                                                </div>
-                                                <div class="shopping-cart-delete">
-                                                    <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <div class="shopping-cart-footer">
-                                            <div class="shopping-cart-total">
-                                                <h4>Total <span>$4000.00</span></h4>
-                                            </div>
-                                            <div class="shopping-cart-button">
-                                                <a href="cart.html" class="outline">View cart</a>
-                                                <a href="checkout.html">Checkout</a>
-                                            </div>
-                                        </div>
+                                @if (Auth::user())
+                                    <livewire:user.cart-dropdown />
+                                @else
+                                    <div class="header-action-icon-2">
+                                        <a href="shop-wishlist.php">
+                                            <img class="svgInject" alt="Surfside Media"
+                                                src="{{ asset('user/assets/imgs/theme/icons/icon-cart.svg') }}">
+                                            <span class="pro-count blue">0</span>
+                                        </a>
                                     </div>
-                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -544,10 +522,10 @@
                                             <li><a href="#">Orders</a></li>
                                             <li><a href="#">Customers</a></li>
                                             @if (Auth::user())
-                                            <form action="{{ route('logout') }}" method="post">
-                                                @csrf
-                                                <button class="btn btn-sm" type="submit">Log Out</button>
-                                            </form>
+                                                <form action="{{ route('logout') }}" method="post">
+                                                    @csrf
+                                                    <button class="btn btn-sm" type="submit">Log Out</button>
+                                                </form>
                                             @endif
                                         </ul>
                                     </li>
@@ -898,7 +876,9 @@
     <script src="{{ asset('user/assets/js/vendor/modernizr-3.6.0.min.js') }}"></script>
     <script src="{{ asset('user/assets/js/vendor/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('user/assets/js/vendor/jquery-migrate-3.3.0.min.js') }}"></script>
-    <script src="{{ asset('user/assets/js/vendor/bootstrap.bundle.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    </script>
     <script src="{{ asset('user/assets/js/plugins/slick.js') }}"></script>
     <script src="{{ asset('user/assets/js/plugins/jquery.syotimer.min.js') }}"></script>
     <script src="{{ asset('user/assets/js/plugins/wow.js') }}"></script>
@@ -916,13 +896,36 @@
     <script src="{{ asset('user/assets/js/plugins/jquery.theia.sticky.js') }}"></script>
     <script src="{{ asset('user/assets/js/plugins/jquery.elevatezoom.js') }}"></script>
     <!-- Template  JS -->
+    <script src="{{ asset('admin/dist/assets/js/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('user/assets/js/main.js?v=3.3') }}"></script>
     <script src="{{ asset('user/assets/js/shop.js?v=3.3') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+        integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ asset('admin/dist/assets/js/custom-jquery.js') }}"></script>
     <script>
         window.addEventListener("load", function() {
             document.getElementById("loader").style.display = "none"; // Hide the loader
         });
+        toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": true,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
     </script>
+    @yield('myScript')
 </body>
 
 </html>

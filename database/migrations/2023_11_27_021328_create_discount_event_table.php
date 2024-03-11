@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('discount_event', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('event_id')->constrained('events');
+            $table->foreignId('event_id')->constrained('events')->onDelete('cascade');
             $table->foreignId('discount_id')->constrained('discounts');
             // Add any additional columns you may need in the pivot table
             $table->timestamps();

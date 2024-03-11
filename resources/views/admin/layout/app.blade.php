@@ -27,6 +27,9 @@
     <link rel="stylesheet" href="{{ asset('admin/dist/assets/css/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/dist/assets/css/owl.theme.default.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/dist/assets/modules/ionicons/css/ionicons.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"
+        integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
@@ -176,7 +179,7 @@
                         </div>
                     </li>
 
-                    <x-notification-bell></x-notification-bell>
+                    <livewire:admin.notification-bell />
                     <li class="dropdown"><a href="#" data-toggle="dropdown"
                             class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                             <img alt="image" src="{{ asset('admin/dist/assets/img/avatar/avatar-1.png ') }}"
@@ -191,6 +194,10 @@
                         <div class="dropdown-menu dropdown-menu-right">
                             <div class="dropdown-title text-nowrap">Logged in at
                                 {{ Auth::user()->created_at->format('Y-m-d') }}</div>
+                            <div class="dropdown-title text-nowrap">
+                                ({{ Auth::user()->created_at->diffForHumans() }})</div>
+
+
                             <a href="features-profile.html" class="dropdown-item has-icon">
                                 <i class="far fa-user"></i> Profile
                             </a>
@@ -223,6 +230,14 @@
                         <li class="{{ request()->is('admin/dashboard') ? 'active' : '' }}"><a
                                 href="{{ route('admin.dashboard') }}" class="nav-link"><i
                                     class="fas fa-fire"></i><span> Dashboard</span></a></li>
+                                    @php
+                                    $newOrderCount = App\Models\Order::where('status',1)->count();
+                                    @endphp
+                        <li class="{{ request()->is('admin/orders/list') ? 'active' : '' }}"><a
+                                href="{{ route('order.list') }}" class="nav-link"><i
+                                    class="fas fa-bell"></i><span>Orders <span id="new_orders">({{ $newOrderCount}})</span> </span></a> </li>
+
+
                         <li class="menu-header">Starter</li>
                         <li class="dropdown {{ request()->is('admin/categories/*') ? 'active' : '' }}">
                             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
@@ -235,6 +250,8 @@
                                 </li>
                             </ul>
                         </li>
+
+                     
 
                         <li class="dropdown {{ request()->is('admin/products/*') ? 'active' : '' }}">
                             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
@@ -265,6 +282,20 @@
                                         class="nav-link " href="{{ route('event.list') }}">Events</a></li>
                                 <li class="{{ request()->is('admin/events/add/page') ? 'active' : '' }}"><a
                                         class="nav-link" href="{{ route('event.addPage') }}">+ Add New Event</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown {{ request()->is('admin/delivery-locations/*') ? 'active' : '' }}">
+                            <a href="#" class="nav-link has-dropdown"><i class="fa-solid fa-truck"></i>
+                                <span>Delivery Locations</span></a>
+                            <ul class="dropdown-menu">
+                                <li class="{{ request()->is('admin/delivery-locations/list') ? 'active' : '' }}"><a
+                                        class="nav-link " href="{{ route('delivery-location.list') }}">Locations</a>
+                                </li>
+                                <li class="{{ request()->is('admin/delivery-locations/add/page') ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ route('delivery-location.addPage') }}">+ Add New
+                                        Location</a>
+                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -315,12 +346,43 @@
 
 
     <!-- Template JS File -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+        integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('admin/dist/assets/js/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('admin/dist/assets/js/scripts.js') }}"></script>
     <script src="{{ asset('admin/dist/assets/js/custom.js') }}"></script>
     <script src="{{ asset('admin/dist/assets/js/jquery-ajax.js') }}"></script>
     @livewireScripts
     @yield('myScript')
+
+
 </body>
+<script>
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": true,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+    var orderEvent = new EventSource("{{ route('notify.admin') }}");
+    orderEvent.onmessage = function(event) {
+        let data = JSON.parse(event.data);
+        toastr.info(data.message);
+        $('#notification').addClass('beep')
+        $('#new_orders').text("( " + data.newOrderCount + " )")
+    }
+</script>
 
 </html>

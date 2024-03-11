@@ -2,8 +2,10 @@
 
 namespace App\Actions\Fortify;
 
+use App\Mail\RegisterComplete;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
@@ -28,13 +30,14 @@ class CreateNewUser implements CreatesNewUsers
             'password_confirmation' => ['required'],
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
-
-        return User::create([
+        $data = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
             'phone' => $input['phone'],
             'address' => $input['address']
         ]);
+        Mail::to($input['email'])->send(new RegisterComplete($data));
+        return $data;
     }
 }

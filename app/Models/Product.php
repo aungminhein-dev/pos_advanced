@@ -7,6 +7,7 @@ use App\Models\Size;
 use App\Models\Brand;
 use App\Models\Event;
 use App\Models\Colour;
+use App\Models\Comment;
 use App\Models\Category;
 use App\Models\Discount;
 use App\Models\SubCategory;
@@ -81,6 +82,16 @@ class Product extends Model
     public function notifications()
     {
         return $this->morphMany(Notification::class,'notifiable');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function scopeDetailsBySlug($query,$slug)
+    {
+        return $query->where('slug', $slug)->with(['subCategory', 'sizes', 'colours', 'images', 'discount', 'tags','comments'])->first();
     }
 }
 

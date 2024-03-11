@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tag;
 use App\Models\Brand;
 use App\Models\Image;
 use App\Models\Colour;
@@ -206,7 +205,11 @@ class ProductController extends Controller
     private function createNotification($request, $productId, $action)
     {
         $product = Product::find($productId);
-        $message = ($product->count() === 1) ? $product->name . " is added to products." : $product->name . " are added to products.";
+        if($action =="create"){
+            $message = ($product->count() === 1) ? $product->name . " is added to products." : $product->name . " are added to products.";
+        }else{
+            $message = ($product->count() === 1) ? $product->name . " is updated." : $product->name . " are updated.";
+        }
         $product->notifications()->create([
             'title' => $message,
             'description' => "Lorem ipsum dolor imet"

@@ -16,6 +16,50 @@
         a img {
             cursor: pointer;
         }
+
+        .comment-reply li {
+            margin-bottom: 15px
+        }
+
+        .comment-reply li:last-child {
+            margin-bottom: none
+        }
+
+        .comment-reply li h5 {
+            font-size: 18px
+        }
+
+        .comment-reply li p {
+            margin-bottom: 0px;
+            font-size: 15px;
+            color: #777
+        }
+
+        .comment-reply .list-inline li {
+            display: inline-block;
+            margin: 0;
+            padding-right: 20px
+        }
+
+        .comment-reply .list-inline li a {
+            font-size: 13px
+        }
+
+        @media (max-width: 640px) {
+            .blog-page .left-box .single-comment-box>ul>li {
+                padding: 25px 0
+            }
+
+            .blog-page .left-box .single-comment-box ul li .icon-box {
+                display: inline-block
+            }
+
+            .blog-page .left-box .single-comment-box ul li .text-box {
+                display: block;
+                padding-left: 0;
+                margin-top: 10px
+            }
+        }
     </style>
     <section class="section">
         <div class="section-header">
@@ -58,8 +102,8 @@
                                                 @php
                                                     $firstImage = $product->images->first()->image_path;
                                                 @endphp
-                                                <div class="tab-pane active" style="max-width: 400px" id="pic-1"><img
-                                                        style="transition:0.5s" class="d-block mx-auto"
+                                                <div class="tab-pane active" style="max-width: 400px; height:350px"
+                                                    id="pic-1"><img style="transition:0.5s" class="d-block mx-auto"
                                                         src="{{ asset($firstImage) }}" />
                                                 </div>
                                             </div>
@@ -76,12 +120,12 @@
                                             </ul>
                                         </div>
                                         <div class="details col-md-6">
-                                            <h2 class="section-title text-muted">{{ $product->name }} ({{ $product->brand->name }})</h2>
+                                            <h2 class="section-title text-muted">{{ $product->name }}
+                                                ({{ $product->brand->name }})</h2>
                                             <div class="">
                                                 {!! $product->description !!}
-                                                <a
-                                                href="{{ route('product.edit', $product->slug) }}"><i
-                                                    class="fas fa-pencil-alt"></i>edit</a>
+                                                <a href="{{ route('product.edit', $product->slug) }}"><i
+                                                        class="fas fa-pencil-alt"></i>edit</a>
 
                                             </div>
                                             @if ($product->discount)
@@ -131,15 +175,14 @@
                                             </div>
                                             <div class="mt-2">
                                                 <span class="badge badge-warning">#{{ $product->category->name }}</span>
-                                                <span class="badge badge-success">#{{ $product->subCategory->name }}</span>
+                                                <span
+                                                    class="badge badge-success">#{{ $product->subCategory->name }}</span>
 
                                             </div>
                                             <div class="mt-2">
                                                 @foreach ($product->tags as $tag)
-
                                                     <span class="mt-2 badge badge-light">{{ $tag->tag }}
-                                                        <a
-                                                            href="{{ route('tag.delete', $tag->id) }}"><i
+                                                        <a href="{{ route('tag.delete', $tag->id) }}"><i
                                                                 class="fa-solid fa-xmark"
                                                                 style="color: rgb(206, 183, 9)"></i></a>
                                                     </span>
@@ -194,21 +237,71 @@
                                         <div class="col-6 col-sm-12" id="edit">
                                             <input type="number" class="form-control" id="percentage"
                                                 placeholder="Fill a percentage">
-                                                <div class="mt-2">
-                                                    <button type="button" class="btn btn-success"
-                                                        onclick="save('create')">Save</button>
-                                                    <button type="reset" class="btn btn-danger"
-                                                        onclick="formClear()">Cancel</button>
-                                                </div>
+                                            <div class="mt-2">
+                                                <button type="button" class="btn btn-success"
+                                                    onclick="save('create')">Save</button>
+                                                <button type="reset" class="btn btn-danger"
+                                                    onclick="formClear()">Cancel</button>
+                                            </div>
                                         </div>
                                     @endif
                                 </div>
                                 <div class="tab-pane fade" id="contact3" role="tabpanel"
                                     aria-labelledby="contact-tab3">
-                                    Vestibulum imperdiet odio sed neque ultricies, ut dapibus mi maximus. Proin
-                                    ligula massa, gravida in lacinia efficitur, hendrerit eget mauris. Pellentesque
-                                    fermentum, sem interdum molestie finibus, nulla diam varius leo, nec varius
-                                    lectus elit id dolor.
+                                    <div class="row">
+                                        <div class="col-12">
+                                            @if ($product->comments->count() != 0)
+                                                <div class="card">
+                                                    <div class="header">
+                                                        <h2 class="text-muted">What are people saying about this course
+                                                            ({{ $product->comments->count() }})
+                                                        </h2>
+                                                    </div>
+                                                    <div class="body">
+                                                        <ul class="comment-reply list-unstyled">
+                                                            @foreach ($product->comments as $comment)
+                                                                <li class="row clearfix">
+                                                                    @if (Auth::user()->image)
+                                                                        <div class="icon-box col-md-2 col-4"><img
+                                                                                class="img-fluid img-thumbnail"
+                                                                                src="{{ asset('storage/' . Auth::user()->image) }}"
+                                                                                alt="image" /></div>
+                                                                    @elseif (Auth::user()->profile_photo_path)
+                                                                        <div class="icon-box col-md-2 col-4"> <img
+                                                                                class="img-fluid img-thumbnail"
+                                                                                src="{{ Auth::user()->profile_photo_path }}"
+                                                                                alt="Google Avatar" />
+                                                                        </div>
+                                                                    @else
+                                                                        <div class="icon-box col-md-2 col-4"><img
+                                                                                class="img-fluid img-thumbnail"
+                                                                                src="{{ asset('user/assets/images/faces/face1.jpg') }}"
+                                                                                alt="image" /></div>
+                                                                    @endif
+
+                                                                    <div class="text-box col-md-10 col-8 p-l-0 p-r0">
+                                                                        <h5 class="m-b-0">{{ $comment->user->name }}</h5>
+                                                                        <p>{{ $comment->description }}</p>
+                                                                        <ul class="list-inline">
+                                                                            <li><a
+                                                                                    href="javascript:void(0);">{{ $comment->created_at->format('j-F-Y') }}</a>
+                                                                            </li>
+                                                                            <li><a href="javascript:void(0);">Reply</a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </li>
+                                                                <hr>
+                                                            @endforeach
+
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             </div>
                         </div>

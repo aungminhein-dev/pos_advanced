@@ -15,7 +15,9 @@
                     <div class="contact-from-area padding-20-row-col wow FadeInUp">
                         <h3 class="mb-10 text-center">Drop Us a Line</h3>
                         <p class="text-muted mb-30 text-center font-sm">Lorem ipsum dolor sit amet consectetur.</p>
-                        <form class="contact-form-style text-center" id="contact-form" action="#" method="post">
+                        <form class="contact-form-style text-center" action="{{ route('send.mail') }}" id="contact-form"  method="post">
+                            @csrf
+
                             <div class="row">
                                 <div class="col-lg-6 col-md-6">
                                     <div class="input-style mb-20">
@@ -29,7 +31,7 @@
                                 </div>
                                 <div class="col-lg-6 col-md-6">
                                     <div class="input-style mb-20">
-                                        <input name="telephone" placeholder="Your Phone" type="tel">
+                                        <input name="phone" placeholder="Your Phone" type="tel">
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6">

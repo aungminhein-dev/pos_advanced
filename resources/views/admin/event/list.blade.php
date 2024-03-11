@@ -47,17 +47,23 @@
                                         <h4 class="text-white">{{ $event->name }}</h4>
                                         <a href="#">Shop over ({{ $event->products->count() }} Items) </a>
                                         @php
-                                            $startTimestamp = strtotime($event->start_date);
-                                            $endTimestamp = strtotime($event->end_date);
-
-                                            // Calculate the absolute difference in days
-                                            $differenceInDays = abs(floor(($endTimestamp - $startTimestamp) / (60 * 60 * 24)));
+                                            $start = date_create($event->start_date);
+                                            $end = date_create($event->end_date);
+                                            $now = now();
+                                            $differenceInDays = date_diff($end, $now);
                                         @endphp
 
-                                        <p class="text-white mt-2">
-                                            from {{ $event->start_date }} to {{ $event->end_date }}
-                                            ({{ $differenceInDays }} days left)
-                                        </p>
+                                        {{-- @if ($differenceInDays > 0)
+                                            <p class="text-white mt-2">
+                                                from {{ $event->start_date }} to {{ $event->end_date }}
+                                                ({{ $differenceInDays }} days left)
+                                            </p>
+                                        @else
+                                            <p class="text-white mt-2">
+                                                from {{ $event->start_date }} to {{ $event->end_date }}
+                                                <span class="text-danger">Ended</span>
+                                            </p>
+                                        @endif --}}
                                         <div class="action">
                                             <a href="" class="btn btn-warning">Edit</a>
                                             <a href="{{ route('event.add-items', $event->slug) }}"

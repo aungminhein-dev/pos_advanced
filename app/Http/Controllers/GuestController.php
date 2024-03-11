@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Brand;
 use App\Models\Event;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GuestController extends Controller
 {
@@ -49,6 +51,7 @@ class GuestController extends Controller
             ->has('discount')
             ->get();
 
+
         // Return view with compacted data
         return view('user.index', compact(
             'brands',
@@ -58,6 +61,7 @@ class GuestController extends Controller
             'popularProducts',
             'discountedProducts',
             'newProducts'
+
         ));
     }
 

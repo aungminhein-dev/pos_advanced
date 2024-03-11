@@ -30,4 +30,6 @@ window.addEventListener("load", () => {
             elements.forEach(element => toggleDarkMode(element, selector));
         });
     }
+
+    
 });

@@ -20,20 +20,19 @@
                 <div class="row">
                     <div class="col-12 ">
                         <div class="card p-3">
-                            <img id="image" src="" alt="" class="d-block mx-auto rounded"
-                                style="max-width :800px">
-                            <div class="form-group">
-                                <label>Image</label>
-                                <div class="custom-file ">
-                                    <input type="file" onchange="showImage()"
-                                        class="custom-file-input @error('image') is-invalid @enderror" name="image"
-                                        id="customFile">
-                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                            <div class="form-group row mb-4">
+                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
+                                <div class="">
+                                    <div id="image-preview" class="image-preview" style="width: 400px;">
+                                        <label for="image-upload" id="image-label">Choose File</label>
+                                        <input type="file" name="image" id="image-upload" />
+                                    </div>
                                 </div>
-                                @error('image')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
                             </div>
+                            @error('image')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+
                             <div class="form-group">
                                 <label>Name</label>
                                 <input type="text" class="form-control @error('name') is-invalid @enderror"
@@ -51,7 +50,10 @@
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+
+                           <div class="form-group">
                             <button type="submit" class="btn btn-primary ">Submit</button>
+                           </div>
                         </div>
                     </div>
                 </div>
@@ -65,4 +67,11 @@
             document.getElementById('image').src = URL.createObjectURL(event.target.files[0]);
         }
     </script>
+
+@endsection
+@section('myScript')
+    <script src="{{ asset('admin/dist/assets/modules/jquery-selectric/jquery.selectric.min.js') }}"></script>
+    <script src="{{ asset('admin/dist/assets/modules/upload-preview/assets/js/jquery.uploadPreview.min.js') }}"></script>
+    <script src="{{ asset('admin/dist/assets/modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js') }}"></script>
+    <script src="{{ asset('admin/dist/assets/js/page/features-post-create.js') }}"></script>
 @endsection

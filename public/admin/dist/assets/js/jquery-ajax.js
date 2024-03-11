@@ -1,9 +1,10 @@
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
+
 $(document).ready(function () {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
     const imageCheckBoxes = $('.imagecheck-input');
     let imagesIds = [];
     const checkedImages = [];
@@ -60,5 +61,22 @@ $(document).ready(function () {
             }
         });
     });
+
+    markAsAllRead = () => {
+        $.ajax({
+            url : "/admin/notifications/mark-as-all-read",
+            method : 'post',
+            success : (response) => {
+                $('#notification').removeClass('beep')
+            },
+            error : (error) => {
+                console.log(error);
+            }
+        })
+    }
+
+    $('#markAsAllRead').click(function(){
+        markAsAllRead()
+    })
 });
 

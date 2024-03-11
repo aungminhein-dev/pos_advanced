@@ -15,11 +15,14 @@ class IsUserMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $role = auth()->user()->role;
-        if($role == "user"){
+        if (!empty(auth()->user())) {
+
+            $role = auth()->user()->role;
+            if ($role === 'user' && !$request->is('user/*')) {
+                return back();
+            }
             return $next($request);
-        }else{
-            return back();
         }
+
     }
 }

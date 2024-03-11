@@ -70,7 +70,7 @@
                     <div class="col-12 col-lg-6">
                         <div class="form-group">
                             <label>Product Name <span class="text-danger">*</span></label>
-                            <input type="text" name="name" placeholder="Enter produt name"
+                            <input type="text" name="name" value="{{ old('name') }}" placeholder="Enter produt name"
                                 class="form-control @error('name')  'is-invalid'  @enderror">
                             @error('name')
                                 <small class="text-danger">{{ $message }}</small>
@@ -96,7 +96,7 @@
                     <div class="col-12 col-lg-6">
                         <div class="form-group">
                             <label>Available Quantity <span class="text-danger">*</span></label>
-                            <input type="number" name="quantity" placeholder="Enter quantity" id=""
+                            <input type="number" value="{{ old('quantity') }}" name="quantity" min="1" placeholder="Enter quantity" id=""
                                 class="form-control @error('quantity') 'is-invalid'  @enderror">
                             @error('quantity')
                                 <small class="text-danger">{{ $message }}</small>
@@ -106,7 +106,7 @@
                     <div class="col-12 col-lg-6">
                         <div class="form-group">
                             <label>Price <span class="text-danger">*</span></label>
-                            <input type="number" name="price" placeholder="Enter price"
+                            <input type="number" min="0" value="{{ old('price') }}" name="price" placeholder="Enter price"
                                 class="form-control @error('price') 'is-invalid'  @enderror">
                             @error('price')
                                 <small class="text-danger">{{ $message }}</small>
@@ -265,7 +265,7 @@
                     <div class="col-12">
                         <div class="form-group">
                             <label>Discount By %<span class="text-muted">(optional)</span></label>
-                            <input type="number" oninput="toggleCalendar()" name="discount"
+                            <input type="number" value="{{ old('discount') }}" oninput="toggleCalendar()" name="discount"
                                 placeholder="Enter percentage for discount" class="form-control">
                         </div>
                     </div>
@@ -289,7 +289,7 @@
 
                     <div class="col-12 mt-2">
                         <div class="form-group">
-                            <textarea name="description" class="summernote-simple" placeholder="Write something to describe about the prouct..."></textarea>
+                            <textarea name="description" class="summernote-simple" placeholder="Write something to describe about the prouct...">{{ old('description') }}</textarea>
                             @error('description')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror

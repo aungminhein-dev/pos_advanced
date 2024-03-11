@@ -11,7 +11,7 @@
                                 <h2 class="animated fw-900">Supper value deals</h2>
                                 <h1 class="animated fw-900 text-brand">On all products</h1>
                                 <p class="animated">Save more with coupons & up to 70% off</p>
-                                <a class="animated btn btn-brush btn-brush-3" href="product-details.html"> Shop Now </a>
+                                <a class="animated btn btn-brush btn-brush-3" href="{{ route('shop') }}"> Shop Now </a>
                             </div>
                         </div>
                         <div class="col-lg-7 col-md-6">
@@ -32,7 +32,7 @@
                                 <h2 class="animated fw-900">Fashion Trending</h2>
                                 <h1 class="animated fw-900 text-7">Great Collection</h1>
                                 <p class="animated">Save more with coupons & up to 20% off</p>
-                                <a class="animated btn btn-brush btn-brush-2" href="product-details.html"> Discover Now </a>
+                                <a class="animated btn btn-brush btn-brush-2" href="{{ route('shop') }}"> Discover Now </a>
                             </div>
                         </div>
                         <div class="col-lg-7 col-md-6">
@@ -89,7 +89,9 @@
             </div>
         </div>
     </section>
+    @if ($products->count() > 0)
     <livewire:user.product-switch/>
+    @endif
     <section class="banner-2 section-padding pb-0">
         <div class="container">
             <div class="banner-img banner-big wow fadeIn animated f-none">
@@ -195,7 +197,7 @@
                             <div class="product-cart-wrap small hover-up">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
-                                        <a href="product-details.html">
+                                        <a href="{{ route('user.product.details',$product->id) }}">
                                             @php
                                                 $productImages = [];
                                                 foreach ($product->images as $image) {
@@ -221,7 +223,7 @@
                                     </div>
                                 </div>
                                 <div class="product-content-wrap">
-                                    <h2><a href="product-details.html">{{ $product->name }}</a></h2>
+                                    <h2><a href="{{ route('user.product.details',$product->id) }}">{{ $product->name }}</a></h2>
                                     @if ($product->discount)
                                         @if ($product->rating)
                                             <div class="rating-result" title="">

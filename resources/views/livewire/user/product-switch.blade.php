@@ -4,13 +4,19 @@
         <div class="tab-header">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link {{ $allProducts ? 'active' : '' }}" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">Featured</button>
+                    <button class="nav-link {{ $allProducts ? 'active' : '' }}" id="nav-tab-one" data-bs-toggle="tab"
+                        data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one"
+                        aria-selected="true">Featured</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link {{ $popularItems ? 'active' : '' }}" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two" wire:click="popularItem" type="button" role="tab" aria-controls="tab-two" aria-selected="false">Popular</button>
+                    <button class="nav-link {{ $popularItems ? 'active' : '' }}" id="nav-tab-two" data-bs-toggle="tab"
+                        data-bs-target="#tab-two" wire:click="popularItem" type="button" role="tab"
+                        aria-controls="tab-two" aria-selected="false">Popular</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link {{ $discountItems ? 'active' : '' }}" id="nav-tab-three" data-bs-toggle="tab" data-bs-target="#tab-three" wire:click="discountItem" type="button" role="tab" aria-controls="tab-three" aria-selected="false">
+                    <button class="nav-link {{ $discountItems ? 'active' : '' }}" id="nav-tab-three"
+                        data-bs-toggle="tab" data-bs-target="#tab-three" wire:click="discountItem" type="button"
+                        role="tab" aria-controls="tab-three" aria-selected="false">
                         Discounted Items
                     </button>
                 </li>
@@ -27,17 +33,24 @@
                             <div class="product-cart-wrap mb-30">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
-                                        <a href="product-details.html">
+                                        <a href="{{ route('user.product.details', $product->slug) }}">
                                             @php
                                                 $productImages = [];
                                                 foreach ($product->images as $image) {
                                                     $productImages[] = $image->image_path;
                                                 }
+
                                             @endphp
-                                            <img class="default-img" src="{{ asset($productImages[0]) }}"
-                                                alt="">
-                                            <img class="hover-img" src="{{ asset($productImages[1]) }}"
-                                                alt="">
+
+                                            @if (count($productImages) != 1)
+                                                <img class="default-img" src="{{ asset($productImages[0]) }}"
+                                                    alt="">
+                                                <img class="hover-img" src="{{ asset($productImages[1]) }}"
+                                                    alt="">
+                                            @else
+                                                <img class="default-img" src="{{ asset($productImages[0]) }}"
+                                                    alt="">
+                                            @endif
                                         </a>
                                     </div>
                                     <div class="product-action-1">
@@ -61,7 +74,9 @@
                                         <a href="shop.html">{{ $product->category->name }} /
                                             {{ $product->subCategory->name }}</a>
                                     </div>
-                                    <h2><a href="product-details.html">{{ $product->name }}</a></h2>
+                                    <h2><a
+                                            href="{{ route('user.product.details', $product->slug) }}">{{ $product->name }}</a>
+                                    </h2>
                                     @if ($product->rating)
                                         <div class="rating-result" title="90%">
                                             <span>
@@ -79,8 +94,8 @@
                                         <span class="old-price">{{ $product->price }} Kyats</span>
                                     @endif
                                     <div class="product-action-1 show">
-                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="cart.html"><i
-                                                class="fi-rs-shopping-bag-add"></i></a>
+                                        <a wire:click.prevent="addToCart({{ $product->id }})" aria-label="Add To Cart"
+                                            class="action-btn hover-up"><i wire:loading.remove class="fi-rs-shopping-bag-add"></i>  <img  wire:loading.block src="{{ asset('user/assets/imgs/spin.png') }}" class="spin" height="40px" alt=""></a>
                                     </div>
                                 </div>
                             </div>
