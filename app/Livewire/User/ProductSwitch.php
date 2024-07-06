@@ -5,6 +5,7 @@ namespace App\Livewire\User;
 use App\Models\Cart;
 use App\Models\Product;
 use Livewire\Component;
+use App\Services\CartService;
 use Illuminate\Support\Facades\Auth;
 
 class ProductSwitch extends Component
@@ -62,10 +63,11 @@ class ProductSwitch extends Component
     }
 
     // add to cart
-    public function addToCart($id, $quantity = 1)
-    {
-        add_to_cart($id);
-        $this->dispatch('addedToCart');
-    }
+     // add to cart
+     public function addToCart($id,CartService $cartService)
+     {
+         $cartService->addToCart($id);
+         $this->dispatch('addedToCart');
+     }
 
 }

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('payment_account_name');
             $table->string('payment_process_number');
             $table->string('address');
-            $table->string('location_link');
+            $table->longText('location_link');
             $table->integer('delivery_price');
             $table->bigInteger('total_with_delivery_price');
             $table->bigInteger('total');

@@ -4,7 +4,9 @@ namespace App\Models;
 
 use App\Models\Tag;
 use App\Models\Product;
+use App\Models\ActivityLog;
 use App\Models\SubCategory;
+use Illuminate\Notifications\Action;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -37,5 +39,10 @@ class Category extends Model
     public function notifications()
     {
         return $this->morphMany(Notification::class,'notifiable');
+    }
+
+    public function activityLog()
+    {
+        return $this->morphMany(ActivityLog::class,'loggable');
     }
 }

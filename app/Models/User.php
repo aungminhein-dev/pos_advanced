@@ -64,4 +64,23 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function userRatingToAProduct($userId, $productId)
+    {
+        $rating = Rating::where('user_id', $userId)
+            ->where('product_id', $productId)
+            ->first();
+
+        return $rating ? $rating->star_count : 0;
+    }
+
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
 }

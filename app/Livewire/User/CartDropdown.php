@@ -20,7 +20,7 @@ class CartDropdown extends Component
 
     public function updateCartItems()
     {
-        $this->cartItems = Cart::where('user_id', Auth::user()->id)->with('product','product.discount', 'user')->get();
+        $this->cartItems = Cart::where('user_id', Auth::user()->id)->with('product','product.images','product.discount', 'user')->get();
         $this->cartItemCount = $this->cartItems->count();
     }
 

@@ -18,11 +18,11 @@ class IsUserMiddleware
         if (!empty(auth()->user())) {
 
             $role = auth()->user()->role;
-            if ($role === 'user' && !$request->is('user/*')) {
+            if ($role != 'user') {
                 return back();
             }
             return $next($request);
         }
-
+        return $next($request);
     }
 }

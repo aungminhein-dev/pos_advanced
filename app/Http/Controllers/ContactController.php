@@ -19,10 +19,9 @@ class ContactController extends Controller
             'subject' => $request->subject,
             'message' => $request->message
         ];
-        // Mail::to($request->email)->send(new ContactUs($data));
+        Mail::to($request->email)->send(new ContactUs($data));
         toastr()->success('A new mail has been sent to admins','Success');
         send_message_alert("Contact");
-        new NotificationBell($contactFormSubmitted = true);
         return back();
     }
 }

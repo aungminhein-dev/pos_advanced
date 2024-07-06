@@ -35,9 +35,11 @@ class CreateNewUser implements CreatesNewUsers
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
             'phone' => $input['phone'],
-            'address' => $input['address']
+            'address' => $input['address'],
+            'social_links' => $input['socialLink']
         ]);
         Mail::to($input['email'])->send(new RegisterComplete($data));
+        toastr()->success('Welcome to our store!','Registered Successfully!');
         return $data;
     }
 }

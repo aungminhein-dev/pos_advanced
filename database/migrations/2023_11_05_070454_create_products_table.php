@@ -15,14 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->integer('quantity');
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->enum('arrival_status', ['New', 'Old'])->default('New');
-            $table->integer('price');
+            $table->bigInteger('price');
+            $table->bigInteger('purchasing_price');
+            $table->bigInteger('selling_price');
             $table->integer('rating')->nullable();
             $table->string('slug')->unique();
             $table->timestamps();
             $table->unsignedBigInteger('view_count')->default(0);
-            $table->foreignId('brand_id')->constrained('brands')->onDelete('cascade');
+            $table->foreignId('brand_id')->constrained('brands')->onDelete('cascade')->nullable();
             $table->foreignId('sub_category_id')->constrained('sub_categories')->onDelete('cascade');
         });
     }

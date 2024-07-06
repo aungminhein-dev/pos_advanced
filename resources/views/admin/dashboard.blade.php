@@ -50,7 +50,7 @@
                             <h4>Total Orders</h4>
                         </div>
                         <div class="card-body">
-                            59
+                            {{ $orderCount }}
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                             <h4>Balance</h4>
                         </div>
                         <div class="card-body">
-                            $187,13
+                            {{ number_format($totalSoldAmount) }} Kyats
                         </div>
                     </div>
                 </div>
@@ -93,17 +93,22 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Budget vs Sales</h4>
+                        <h4>Yearly Sales</h4>
+                        <div class="card-header-action dropdown">
+                            <a href="#" data-toggle="dropdown" class="btn btn-primary dropdown-toggle">Select Year</a>
+                            <ul id="yearDropdownMenu" class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                            </ul>
+                        </div>
                     </div>
                     <div class="card-body">
                         <canvas id="myChart" height="158"></canvas>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4">
+            {{-- <div class="col-lg-4">
                 <div class="card gradient-bottom">
                     <div class="card-header">
                         <h4>Top 5 Products</h4>
@@ -243,6 +248,17 @@
                         </div>
                     </div>
                 </div>
+            </div> --}}
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Daily Sales</h4>
+
+                    </div>
+                    <div class="card-body">
+                        <canvas id="daily-sales" height="158"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -256,7 +272,9 @@
                             <div>
                                 <div class="product-item pb-3">
                                     <div class="product-image">
-                                        <img alt="image" src="{{ asset('admin/dist/assets/img/products/product-4-50.png')}}" class="img-fluid">
+                                        <img alt="image"
+                                            src="{{ asset('admin/dist/assets/img/products/product-4-50.png') }}"
+                                            class="img-fluid">
                                     </div>
                                     <div class="product-details">
                                         <div class="product-name">iBook Pro 2018</div>
@@ -277,7 +295,9 @@
                             <div>
                                 <div class="product-item">
                                     <div class="product-image">
-                                        <img alt="image" src="{{ asset('admin/dist/assets/img/products/product-3-50.png')}}" class="img-fluid">
+                                        <img alt="image"
+                                            src="{{ asset('admin/dist/assets/img/products/product-3-50.png') }}"
+                                            class="img-fluid">
                                     </div>
                                     <div class="product-details">
                                         <div class="product-name">oPhone S9 Limited</div>
@@ -298,7 +318,9 @@
                             <div>
                                 <div class="product-item">
                                     <div class="product-image">
-                                        <img alt="image" src="{{ asset('admin/dist/assets/img/products/product-1-50.png')}}" class="img-fluid">
+                                        <img alt="image"
+                                            src="{{ asset('admin/dist/assets/img/products/product-1-50.png') }}"
+                                            class="img-fluid">
                                     </div>
                                     <div class="product-details">
                                         <div class="product-name">Headphone Blitz</div>
@@ -332,8 +354,8 @@
                                 <ul class="list-unstyled list-unstyled-border list-unstyled-noborder mb-0">
                                     <li class="media">
                                         <img class="img-fluid mt-1 img-shadow"
-                                            src="{{ asset('admin/dist/assets/modules/flag-icon-css/flags/4x3/id.svg')}}" alt="image"
-                                            width="40">
+                                            src="{{ asset('admin/dist/assets/modules/flag-icon-css/flags/4x3/id.svg') }}"
+                                            alt="image" width="40">
                                         <div class="media-body ml-3">
                                             <div class="media-title">Indonesia</div>
                                             <div class="text-small text-muted">3,282 <i
@@ -342,8 +364,8 @@
                                     </li>
                                     <li class="media">
                                         <img class="img-fluid mt-1 img-shadow"
-                                            src="{{ asset('admin/dist/assets/modules/flag-icon-css/flags/4x3/my.svg')}}" alt="image"
-                                            width="40">
+                                            src="{{ asset('admin/dist/assets/modules/flag-icon-css/flags/4x3/my.svg') }}"
+                                            alt="image" width="40">
                                         <div class="media-body ml-3">
                                             <div class="media-title">Malaysia</div>
                                             <div class="text-small text-muted">2,976 <i
@@ -352,8 +374,8 @@
                                     </li>
                                     <li class="media">
                                         <img class="img-fluid mt-1 img-shadow"
-                                            src="{{ asset('admin/dist/assets/modules/flag-icon-css/flags/4x3/us.svg')}}" alt="image"
-                                            width="40">
+                                            src="{{ asset('admin/dist/assets/modules/flag-icon-css/flags/4x3/us.svg') }}"
+                                            alt="image" width="40">
                                         <div class="media-body ml-3">
                                             <div class="media-title">United States</div>
                                             <div class="text-small text-muted">1,576 <i
@@ -367,8 +389,8 @@
                                 <ul class="list-unstyled list-unstyled-border list-unstyled-noborder mb-0">
                                     <li class="media">
                                         <img class="img-fluid mt-1 img-shadow"
-                                            src="{{ asset('admin/dist/assets/modules/flag-icon-css/flags/4x3/id.svg')}}" alt="image"
-                                            width="40">
+                                            src="{{ asset('admin/dist/assets/modules/flag-icon-css/flags/4x3/id.svg') }}"
+                                            alt="image" width="40">
                                         <div class="media-body ml-3">
                                             <div class="media-title">Indonesia</div>
                                             <div class="text-small text-muted">3,486 <i
@@ -377,8 +399,8 @@
                                     </li>
                                     <li class="media">
                                         <img class="img-fluid mt-1 img-shadow"
-                                            src="{{ asset('admin/dist/assets/modules/flag-icon-css/flags/4x3/ps.svg')}}" alt="image"
-                                            width="40">
+                                            src="{{ asset('admin/dist/assets/modules/flag-icon-css/flags/4x3/ps.svg') }}"
+                                            alt="image" width="40">
                                         <div class="media-body ml-3">
                                             <div class="media-title">Palestine</div>
                                             <div class="text-small text-muted">3,182 <i
@@ -387,8 +409,8 @@
                                     </li>
                                     <li class="media">
                                         <img class="img-fluid mt-1 img-shadow"
-                                            src="{{ asset('admin/dist/assets/modules/flag-icon-css/flags/4x3/de.svg')}}" alt="image"
-                                            width="40">
+                                            src="{{ asset('admin/dist/assets/modules/flag-icon-css/flags/4x3/de.svg') }}"
+                                            alt="image" width="40">
                                         <div class="media-body ml-3">
                                             <div class="media-title">Germany</div>
                                             <div class="text-small text-muted">2,317 <i
@@ -533,5 +555,173 @@
     </section>
     <script src="{{ asset('admin/dist/assets/modules/chart.min.js') }}"></script>
     <script src="{{ asset('admin/dist/assets/js/page/index.js') }}"></script>
+    <script>
+        function formatNumber(number) {
+            if (number >= 1000000000) {
+                return (number / 1000000000).toFixed(1) + 'B'; // Convert to billions
+            } else if (number >= 1000000) {
+                return (number / 1000000).toFixed(1) + 'M'; // Convert to millions
+            } else if (number >= 1000) {
+                return (number / 1000).toFixed(1) + 'K'; // Convert to thousands
+            } else {
+                return number.toString(); // No need for scaling
+            }
+        }
 
+        var ctx = document.getElementById("myChart").getContext('2d');
+        var dtx = document.getElementById("daily-sales").getContext('2d');
+
+        var yearlySales = {!! json_encode($yearlySales) !!}
+        // var dailySales = {!! json_encode($dailySales) !!}
+
+        function formatNumber(number) {
+            if (number >= 1000000000) {
+                return (number / 1000000000).toFixed(1) + 'B';
+            } else if (number >= 1000000) {
+                return (number / 1000000).toFixed(1) + 'M';
+            } else if (number >= 1000) {
+                return (number / 1000).toFixed(1) + 'K';
+            } else {
+                return number.toString();
+            }
+        }
+
+
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: yearlySales.map(function(data) {
+                    return data.month;
+                }),
+                datasets: [{
+                    label: 'Sales',
+                    data: yearlySales.map(function(data) {
+                        return data.total
+                    }),
+                    borderWidth: 2,
+                    backgroundColor: 'rgba(72, 66, 245,0.9)',
+                    borderColor: 'transparent',
+                    pointBorderWidth: 0,
+                    pointRadius: 3.5,
+                    pointBackgroundColor: 'transparent',
+                    pointHoverBackgroundColor: 'rgba(72, 66, 245,0.9)',
+                }]
+            },
+            options: {
+                legend: {
+                    display: true
+                },
+                scales: {
+                    yAxes: [{
+                        gridLines: {
+                            drawBorder: false,
+                            color: '#f2f2f2',
+                        },
+                        ticks: {
+                            suggestedMin: 0,
+                            suggestedMax: 10,
+                            beginAtZero: true,
+                            callback: function(value, index, values) {
+                                return formatNumber(value) + " Ks";
+                            }
+                        }
+                    }],
+                    xAxes: [{
+                        gridLines: {
+                            display: false,
+                            tickMarkLength: 15,
+                        }
+                    }]
+                },
+
+            }
+        });
+
+        var dailySalesChart = new Chart(dtx, {
+            type: 'line',
+            data: {
+                labels: [
+                    @foreach ($dailySales as $key => $value)
+                        '{{ $key }}', // Assuming $key is the date
+                    @endforeach
+                ],
+                datasets: [{
+                    label: 'Sales',
+                    data: [
+                        @foreach ($dailySales as $key => $value)
+                            {{ $value }}, // Assuming $value is the total sales for that day
+                        @endforeach
+                    ],
+                    borderWidth: 4,
+                    backgroundColor: 'rgba(16, 9, 222,0.4)',
+                    borderColor: 'rgba(16, 9, 222)',
+                    pointBorderWidth: 0,
+                    pointRadius: 3.5,
+                    pointBackgroundColor: 'transparent',
+                    pointHoverBackgroundColor: 'rgba(16, 9, 222,0.4)',
+                }]
+            },
+
+            options: {
+                legend: {
+                    display: true
+                },
+                scales: {
+                    yAxes: [{
+                        gridLines: {
+                            drawBorder: false,
+                            color: '#f2f2f2',
+                        },
+                        ticks: {
+                            suggestedMin: 0,
+                            suggestedMax: 10,
+                            beginAtZero: false,
+                            callback: function(value, index, values) {
+                                return formatNumber(value) + " Ks";
+                            }
+                        }
+                    }],
+                    xAxes: [{
+                        gridLines: {
+                            display: false,
+                            tickMarkLength: 15,
+                        }
+                    }]
+                },
+
+            }
+        });
+
+        var currentYear = new Date().getFullYear();
+        var dropdownMenu = document.getElementById("yearDropdownMenu");
+        for (var year = currentYear; year >= 2020; year--) { // Change 2020 to the desired starting year
+            var listItem = document.createElement("li");
+            var linkItem = document.createElement("a");
+            linkItem.href = "#";
+            linkItem.classList.add("dropdown-item");
+            linkItem.textContent = year;
+            linkItem.addEventListener("click", function(event) {
+                event.preventDefault()
+                var selectedYear = this.textContent;
+                console.log(selectedYear);
+                document.getElementById("yearDropdownMenu").textContent = "Year " + selectedYear;
+                // Call a function to update the chart based on the selected year
+                updateYearlyChart(selectedYear);
+            });
+            listItem.appendChild(linkItem);
+            dropdownMenu.appendChild(listItem);
+        }
+
+        function updateYearlyChart($year){
+            $.ajax({
+                'url' : '/admin/dashboard?year='+$year,
+                'method' :'get',
+                success : function(){
+                    window.location.href = '/admin/dashboard?year='+$year
+                }
+
+            })
+        }
+
+    </script>
 @endsection

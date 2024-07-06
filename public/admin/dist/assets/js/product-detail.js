@@ -52,9 +52,9 @@ const save = (action) => {
             'percentage': percentage,
             'productId': productId,
         };
-        url = '/admin/discount/add';
+        url = '/admin/discounts/add';
     } else {
-        url = '/admin/discount/update';
+        url = '/admin/discounts/update';
         data = {
             'percentage': percentage,
             'id': discountId,

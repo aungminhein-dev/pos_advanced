@@ -39,17 +39,18 @@
                                                 foreach ($product->images as $image) {
                                                     $productImages[] = $image->image_path;
                                                 }
-
                                             @endphp
 
-                                            @if (count($productImages) != 1)
-                                                <img class="default-img" src="{{ asset($productImages[0]) }}"
-                                                    alt="">
-                                                <img class="hover-img" src="{{ asset($productImages[1]) }}"
-                                                    alt="">
-                                            @else
-                                                <img class="default-img" src="{{ asset($productImages[0]) }}"
-                                                    alt="">
+                                            @if (count($productImages) > 0)
+                                                @if (count($productImages) != 1)
+                                                    <img class="default-img" src="{{ asset($productImages[0]) }}"
+                                                        alt="">
+                                                    <img class="hover-img" src="{{ asset($productImages[1]) }}"
+                                                        alt="">
+                                                @else
+                                                    <img class="default-img" src="{{ asset($productImages[0]) }}"
+                                                        alt="">
+                                                @endif
                                             @endif
                                         </a>
                                     </div>
@@ -65,7 +66,7 @@
                                         @if ($product->arrival_status == 'New')
                                             <span class="new">{{ $product->arrival_status }}</span>
                                         @else
-                                            -{{ $product->discount->percentage }} %
+                                            - {{ $product->discount->percentage }} %
                                         @endif
                                     </div>
                                 </div>
@@ -86,7 +87,7 @@
                                     @endif
                                     @if ($product->discount)
                                         <div class="product-price">
-                                            <span>{{ $product->price - ($product->price * $product->discount->percentage) / 100 }}
+                                            <span>{{ discounted_price($product->price, $product->discount->percentage) }}
                                                 Kyats</span>
                                             <span class="old-price">{{ $product->price }} Kyats</span>
                                         </div>
@@ -95,7 +96,11 @@
                                     @endif
                                     <div class="product-action-1 show">
                                         <a wire:click.prevent="addToCart({{ $product->id }})" aria-label="Add To Cart"
-                                            class="action-btn hover-up"><i wire:loading.remove class="fi-rs-shopping-bag-add"></i>  <img  wire:loading.block src="{{ asset('user/assets/imgs/spin.png') }}" class="spin" height="40px" alt=""></a>
+                                            class="action-btn hover-up"><i wire:target="addToCart({{ $product->id }})"
+                                                wire:loading.remove class="fi-rs-shopping-bag-add"></i><img
+                                                wire:target="addToCart({{ $product->id }})" wire:loading.block
+                                                src="{{ asset('user/assets/imgs/spin.png') }}" class="spin"
+                                                height="40px" alt=""></a>
                                     </div>
                                 </div>
                             </div>

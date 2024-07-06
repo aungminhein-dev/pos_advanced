@@ -8,8 +8,7 @@
     <title>Ecommerce - @yield('title')</title>
 
     <!-- General CSS Files -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ asset('admin/dist/assets/modules/fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">    <link rel="stylesheet" href="{{ asset('admin/dist/assets/modules/fontawesome/css/all.min.css') }}">
 
 
     <!-- CSS Libraries -->
@@ -201,7 +200,7 @@
                             <a href="features-profile.html" class="dropdown-item has-icon">
                                 <i class="far fa-user"></i> Profile
                             </a>
-                            <a href="features-activities.html" class="dropdown-item has-icon">
+                            <a href="{{ route('admin.activityLogs') }}" class="dropdown-item has-icon">
                                 <i class="fas fa-bolt"></i> Activities
                             </a>
                             <a href="features-settings.html" class="dropdown-item has-icon">
@@ -230,12 +229,13 @@
                         <li class="{{ request()->is('admin/dashboard') ? 'active' : '' }}"><a
                                 href="{{ route('admin.dashboard') }}" class="nav-link"><i
                                     class="fas fa-fire"></i><span> Dashboard</span></a></li>
-                                    @php
-                                    $newOrderCount = App\Models\Order::where('status',1)->count();
-                                    @endphp
+                        @php
+                            $newOrderCount = App\Models\Order::where('status', 1)->count();
+                        @endphp
                         <li class="{{ request()->is('admin/orders/list') ? 'active' : '' }}"><a
                                 href="{{ route('order.list') }}" class="nav-link"><i
-                                    class="fas fa-bell"></i><span>Orders <span id="new_orders">({{ $newOrderCount}})</span> </span></a> </li>
+                                    class="fas fa-bell"></i><span>Orders <span
+                                        id="new_orders">({{ $newOrderCount }})</span> </span></a> </li>
 
 
                         <li class="menu-header">Starter</li>
@@ -251,7 +251,7 @@
                             </ul>
                         </li>
 
-                     
+
 
                         <li class="dropdown {{ request()->is('admin/products/*') ? 'active' : '' }}">
                             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
@@ -376,13 +376,19 @@
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
     }
-    var orderEvent = new EventSource("{{ route('notify.admin') }}");
-    orderEvent.onmessage = function(event) {
-        let data = JSON.parse(event.data);
-        toastr.info(data.message);
-        $('#notification').addClass('beep')
-        $('#new_orders').text("( " + data.newOrderCount + " )")
-    }
+
 </script>
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+  <script>
+    Pusher.logToConsole = true;
+    var pusher = new Pusher('78fc17bc824cf469f0b0', {
+      cluster: 'ap2'
+    });
+    var channel = pusher.subscribe('my-channel');
+    channel.bind('my-event', function(data) {
+      toastr.info(data.title)
+    });
+  </script>
 
 </html>

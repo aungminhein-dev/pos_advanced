@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\Category;
+use App\Models\ActivityLog;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class CategoryController extends Controller
 {
     public function list()
     {
-        $categories = Category::withCount('subCategories','products')->with('image')->get();
+        $categories = Category::withCount('subCategories', 'products')->with('image')->get();
         return view('admin.category.list', compact('categories'));
     }
 
@@ -28,15 +30,18 @@ class CategoryController extends Controller
         $data = $this->getCategoryData($request);
         $image = $this->uploadImage($request, $data);
         $category = Category::create($data);
-        $this->createNotification($category->id,'create');
+        $this->createNotification($category->id, 'create');
         if ($image) {
-           $category->image()->create([
+            $category->image()->create([
                 'image_path' => $image
             ]);
         }
         $category->tag()->create([
-            'tag' => strtolower('#'.str_replace('','-',$category->name))
+            'tag' => strtolower('#' . str_replace('', '-', $category->name))
         ]);
+
+        $this->logTo($category->id,'create',Auth::user()->name);
+
         return redirect()->route('category.list')->with('createSuccessMessage', 'A new category is created.');
     }
 
@@ -67,7 +72,7 @@ class CategoryController extends Controller
 
     public function detail($slug)
     {
-        $category = Category::where('slug', $slug)->with('subCategories','image','tag')->first();
+        $category = Category::where('slug', $slug)->with('subCategories', 'image', 'tag')->first();
         return view('admin.category.detail', compact('category'));
     }
 
@@ -91,7 +96,7 @@ class CategoryController extends Controller
     {
         return [
             'name' => $request->name,
-            'description' =>$request->description,
+            'description' => $request->description,
             'slug' => strtolower(str_replace(' ', '-', $request->name))
         ];
     }
@@ -104,7 +109,6 @@ class CategoryController extends Controller
             return $filePath;
         }
         return null;
-
     }
 
     private function deleteCategoryImage($category)
@@ -121,6 +125,16 @@ class CategoryController extends Controller
         $category->notifications()->create([
             'title' => $message,
             'description' => "Lorem ipsum dolor imet"
+        ]);
+    }
+
+    private function logTo($categoryId, $action, $userName)
+    {
+        $category = Category::find($categoryId);
+        $message = $category->name . "is ". $action."d" . " to categories by " . $userName . " .";
+        $category->activityLog()->create([
+            'title' => $message,
+            'user_id' => Auth::user()->id
         ]);
     }
 }

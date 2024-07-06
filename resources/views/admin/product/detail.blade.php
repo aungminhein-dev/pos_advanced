@@ -102,22 +102,24 @@
                                                 @php
                                                     $firstImage = $product->images->first()->image_path;
                                                 @endphp
-                                                <div class="tab-pane active" style="max-width: 400px; height:350px"
-                                                    id="pic-1"><img style="transition:0.5s" class="d-block mx-auto"
+                                                <div class="tab-pane active" style="max-width: 400px;" id="pic-1"><img
+                                                        style="transition:0.5s" class="d-block mx-auto"
                                                         src="{{ asset($firstImage) }}" />
                                                 </div>
-                                            </div>
-                                            <ul class="preview-thumbnail nav nav-tabs owl-carousel owl-theme">
-                                                @foreach ($product->images as $image)
-                                                    <div class="preview-li item" style="display: block; !important">
-                                                        <a data-toggle="tab">
-                                                            <img src="{{ asset($image->image_path) }}" class="rounded"
-                                                                style="transition:0.5s;" />
-                                                        </a>
-                                                    </div>
-                                                @endforeach
+                                                <ul
+                                                    class="preview-thumbnail nav nav-tabs owl-carousel owl-theme d-block mt-10">
+                                                    @foreach ($product->images as $image)
+                                                        <div class="preview-li item" style="display: block; !important">
+                                                            <a data-toggle="tab">
+                                                                <img src="{{ asset($image->image_path) }}" class="rounded"
+                                                                    style="transition:0.5s;" />
+                                                            </a>
+                                                        </div>
+                                                    @endforeach
 
-                                            </ul>
+                                                </ul>
+                                            </div>
+
                                         </div>
                                         <div class="details col-md-6">
                                             <h2 class="section-title text-muted">{{ $product->name }}
@@ -136,7 +138,7 @@
                                                 </div>
                                                 <div class="mt-2">
                                                     Current price : <span
-                                                        class="text-success current-price">{{ $product->price - $product->price * ($product->discount->percentage / 100) }}
+                                                        class="text-success current-price">{{ price_of($product) }}
                                                         Kyats</span> <span
                                                         class="percentageSpan text-danger">(-{{ $product->discount->percentage }}%)</span>
                                                 </div>
@@ -145,15 +147,21 @@
                                                     {{ $product->price }} Kyats
                                                 </h2>
                                             @endif
+
+                                            <p class="mt-2">
+                                                <span class="text-success">{{ $product->quantity }}</span> in stocks.
+                                            </p>
+
                                             <div class="row mt-2">
                                                 <div class="col-3">
-                                                    <i class="fa-solid fa-star text-warning"></i>
-                                                    <i class="fa-solid fa-star text-warning"></i>
-                                                    <i class="fa-solid fa-star text-warning"></i>
-                                                    <i class="fa-solid fa-star text-warning"></i>
-                                                    <i class="fa-solid fa-star text-warning"></i>
+                                                    @for ($i = 0; $i < star_rating_of($product); $i++)
+                                                        <i class="fa-solid fa-star text-warning"></i>
+                                                    @endfor
+
                                                 </div>
-                                                <div class="col-auto">20 reviews</div>
+                                                <div class="col-auto">{{ $product->comments->count() }} reviews | <span
+                                                        class=" text-muted"> ({{ number_rating_of($product) }} / 10)
+                                                    </span></div>
                                             </div>
                                             <div class="mt-2">
                                                 @foreach ($product->colours as $colour)
@@ -175,8 +183,7 @@
                                             </div>
                                             <div class="mt-2">
                                                 <span class="badge badge-warning">#{{ $product->category->name }}</span>
-                                                <span
-                                                    class="badge badge-success">#{{ $product->subCategory->name }}</span>
+                                                <span class="badge badge-success">#{{ $product->subCategory->name }}</span>
 
                                             </div>
                                             <div class="mt-2">

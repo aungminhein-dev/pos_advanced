@@ -7,11 +7,19 @@ use App\Models\Brand;
 use App\Models\Event;
 use App\Models\Product;
 use App\Models\Category;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class GuestController extends Controller
 {
+
+    protected $productService;
+
+    public function __construct(ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
 
     public function home()
     {
@@ -73,9 +81,12 @@ class GuestController extends Controller
     }
 
     // shop
-    public function shop()
+    public function shop(Request $request)
     {
-        return view('user.shop');
+
+        $products = $this->productService->productListWithPagination($request->key,request('item-per-page'));
+        $categories = Category::withCount('products')->get();
+        return view('user.shop',compact('products','categories'));
     }
 
     // contact

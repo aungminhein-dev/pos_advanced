@@ -7,12 +7,11 @@ use Illuminate\Http\Request;
 
 class Authenticate extends Middleware
 {
-    /**
-     * Get the path the user should be redirected to when they are not authenticated.
-     */
+
 
     protected function redirectTo(Request $request): ?string
     {
+        toastr()->warning('Please log in to an account to continue.','Failed.');
         return $request->expectsJson() ? null : route('loginPage');
     }
 }

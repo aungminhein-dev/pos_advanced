@@ -23,4 +23,9 @@ class SubCategory extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    public function activityLog()
+    {
+        return $this->morphMany(ActivityLog::class,'loggable');
+    }
 }

@@ -26,9 +26,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"
         integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
         * {
@@ -63,6 +60,156 @@
 
         .spin {
             animation: spin 1s infinite linear;
+        }
+
+        /* Thin scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            /* Width of the scrollbar */
+            height: 8px;
+            /* Height of the scrollbar for horizontal scrollbar */
+        }
+
+        /* Track (the background of the scrollbar) */
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            /* Color of the scrollbar track */
+        }
+
+        /* Handle (the draggable part of the scrollbar) */
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            /* Color of the scrollbar handle */
+            border-radius: 4px;
+            /* Rounded corners of the scrollbar handle */
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+            /* Color of the scrollbar handle on hover */
+        }
+        .badge {
+            display: inline-block;
+            padding: .25em .4em;
+            font-size: 75%;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: .25rem
+        }
+
+        .badge:empty {
+            display: none
+        }
+
+        .btn .badge {
+            position: relative;
+            top: -1px
+        }
+
+        .badge-pill {
+            padding-right: .6em;
+            padding-left: .6em;
+            border-radius: 10rem
+        }
+
+        .badge-primary {
+            color: #fff;
+            background-color: #007bff
+        }
+
+        .badge-primary[href]:focus,
+        .badge-primary[href]:hover {
+            color: #fff;
+            text-decoration: none;
+            background-color: #0062cc
+        }
+
+        .badge-secondary {
+            color: #fff;
+            background-color: #6c757d
+        }
+
+        .badge-secondary[href]:focus,
+        .badge-secondary[href]:hover {
+            color: #fff;
+            text-decoration: none;
+            background-color: #545b62
+        }
+
+        .badge-success {
+            color: #fff;
+            background-color: #28a745
+        }
+
+        .badge-success[href]:focus,
+        .badge-success[href]:hover {
+            color: #fff;
+            text-decoration: none;
+            background-color: #1e7e34
+        }
+
+        .badge-info {
+            color: #fff;
+            background-color: #17a2b8
+        }
+
+        .badge-info[href]:focus,
+        .badge-info[href]:hover {
+            color: #fff;
+            text-decoration: none;
+            background-color: #117a8b
+        }
+
+        .badge-warning {
+            color: #212529;
+            background-color: #ffc107
+        }
+
+        .badge-warning[href]:focus,
+        .badge-warning[href]:hover {
+            color: #212529;
+            text-decoration: none;
+            background-color: #d39e00
+        }
+
+        .badge-danger {
+            color: #fff;
+            background-color: #dc3545
+        }
+
+        .badge-danger[href]:focus,
+        .badge-danger[href]:hover {
+            color: #fff;
+            text-decoration: none;
+            background-color: #bd2130
+        }
+
+        .badge-light {
+            color: #212529;
+            background-color: #f8f9fa
+        }
+
+        .badge-light[href]:focus,
+        .badge-light[href]:hover {
+            color: #212529;
+            text-decoration: none;
+            background-color: #dae0e5
+        }
+
+        .badge-dark {
+            color: #fff;
+            background-color: #343a40
+        }
+
+        .badge-dark[href]:focus,
+        .badge-dark[href]:hover {
+            color: #fff;
+            text-decoration: none;
+            background-color: #1d2124
         }
     </style>
 </head>
@@ -106,12 +253,20 @@
                     <div class="col-xl-6 col-lg-4">
                         <div class="text-center">
                             <div id="news-flash" class="d-inline-block">
-                                <ul>
-                                    <li>Get great devices up to 50% off <a href="shop.html">View details</a></li>
-                                    <li>Supper Value Deals - Save more with coupons</li>
-                                    <li>Trendy 25silver jewelry, save up 35% off today <a href="shop.html">Shop now</a>
-                                    </li>
-                                </ul>
+                                @php
+                                    $events = App\Models\Event::select('name')->get();
+                                @endphp
+                                @if ($events->count() > 0)
+                                    <ul>
+                                        @foreach ($events as $event)
+                                            <li>{{ $event->name }}</li>
+                                        @endforeach
+                                    </ul>
+                                @else
+                                    <ul>
+                                        <li>Welcome to our website! Enjoy our products.</li>
+                                    </ul>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -148,11 +303,7 @@
                                 alt="logo"></a>
                     </div>
                     <div class="header-right">
-                        <div class="search-style-1">
-                            <form action="#">
-                                <input type="text" placeholder="Search for items...">
-                            </form>
-                        </div>
+                        @livewire('user-search-bar')
                         <div class="header-action-right">
                             <div class="header-action-2">
                                 <div class="header-action-icon-2">
@@ -166,7 +317,7 @@
                                     <livewire:user.cart-dropdown />
                                 @else
                                     <div class="header-action-icon-2">
-                                        <a href="shop-wishlist.php">
+                                        <a href="{{ route('cart.list') }}">
                                             <img class="svgInject" alt="Surfside Media"
                                                 src="{{ asset('user/assets/imgs/theme/icons/icon-cart.svg') }}">
                                             <span class="pro-count blue">0</span>
@@ -448,66 +599,7 @@
                                             href="{{ route('about') }}">About</a></li>
                                     <li><a class="{{ request()->is('shop') ? 'active' : '' }}"
                                             href="{{ route('shop') }}">Shop</a></li>
-                                    <li class="position-static"><a href="#">Our Collections <i
-                                                class="fi-rs-angle-down"></i></a>
-                                        <ul class="mega-menu">
-                                            <li class="sub-mega-menu sub-mega-menu-width-22">
-                                                <a class="menu-title" href="#">Women's Fashion</a>
-                                                <ul>
-                                                    <li><a href="product-details.html">Dresses</a></li>
-                                                    <li><a href="product-details.html">Blouses & Shirts</a></li>
-                                                    <li><a href="product-details.html">Hoodies & Sweatshirts</a></li>
-                                                    <li><a href="product-details.html">Wedding Dresses</a></li>
-                                                    <li><a href="product-details.html">Prom Dresses</a></li>
-                                                    <li><a href="product-details.html">Cosplay Costumes</a></li>
-                                                </ul>
-                                            </li>
-                                            <li class="sub-mega-menu sub-mega-menu-width-22">
-                                                <a class="menu-title" href="#">Men's Fashion</a>
-                                                <ul>
-                                                    <li><a href="product-details.html">Jackets</a></li>
-                                                    <li><a href="product-details.html">Casual Faux Leather</a></li>
-                                                    <li><a href="product-details.html">Genuine Leather</a></li>
-                                                    <li><a href="product-details.html">Casual Pants</a></li>
-                                                    <li><a href="product-details.html">Sweatpants</a></li>
-                                                    <li><a href="product-details.html">Harem Pants</a></li>
-                                                </ul>
-                                            </li>
-                                            <li class="sub-mega-menu sub-mega-menu-width-22">
-                                                <a class="menu-title" href="#">Technology</a>
-                                                <ul>
-                                                    <li><a href="product-details.html">Gaming Laptops</a></li>
-                                                    <li><a href="product-details.html">Ultraslim Laptops</a></li>
-                                                    <li><a href="product-details.html">Tablets</a></li>
-                                                    <li><a href="product-details.html">Laptop Accessories</a></li>
-                                                    <li><a href="product-details.html">Tablet Accessories</a></li>
-                                                </ul>
-                                            </li>
-                                            <li class="sub-mega-menu sub-mega-menu-width-34">
-                                                <div class="menu-banner-wrap">
-                                                    <a href="product-details.html"><img
-                                                            src="{{ asset('user/assets/imgs/banner/menu-banner.jpg') }}"
-                                                            alt="Surfside Media"></a>
-                                                    <div class="menu-banner-content">
-                                                        <h4>Hot deals</h4>
-                                                        <h3>Don't miss<br> Trending</h3>
-                                                        <div class="menu-banner-price">
-                                                            <span class="new-price text-success">Save to 50%</span>
-                                                        </div>
-                                                        <div class="menu-banner-btn">
-                                                            <a href="product-details.html">Shop now</a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="menu-banner-discount">
-                                                        <h3>
-                                                            <span>35%</span>
-                                                            off
-                                                        </h3>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </li>
+                                    <livewire:user.category-dropdown />
                                     <li><a class="{{ request()->is('blog') ? 'active' : '' }}"
                                             href="{{ route('blog') }}">Blog </a></li>
                                     <li><a class="{{ request()->is('contact') ? 'active' : '' }}"
@@ -515,7 +607,7 @@
                                     <li><a class="" href="#">My Account<i
                                                 class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
-                                            <li><a href="#">Dashboard</a></li>
+                                            <li><a href="{{ route('user.dashboard') }}">Dashboard</a></li>
                                             <li><a href="#">Products</a></li>
                                             <li><a href="#">Categories</a></li>
                                             <li><a href="#">Coupons</a></li>
@@ -902,28 +994,46 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
         integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.1.2/js/star-rating.min.js"
+        integrity="sha512-BjVoLC9Qjuh4uR64WRzkwGnbJ+05UxQZphP2n7TJE/b0D/onZ/vkhKTWpelfV6+8sLtQTUqvZQbvvGnzRZniTQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('admin/dist/assets/js/custom-jquery.js') }}"></script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    {{-- <script>
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('b97a081bcbb2095e5b82', {
+            cluster: 'ap1'
+        });
+
+        var channel = pusher.subscribe('my-channel');
+        channel.bind('my-event', function(data) {
+            alert(JSON.stringify(data));
+        });
+    </script> --}}
     <script>
         window.addEventListener("load", function() {
             document.getElementById("loader").style.display = "none"; // Hide the loader
         });
         toastr.options = {
-        "closeButton": true,
-        "debug": false,
-        "newestOnTop": false,
-        "progressBar": true,
-        "positionClass": "toast-top-right",
-        "preventDuplicates": true,
-        "onclick": null,
-        "showDuration": "300",
-        "hideDuration": "1000",
-        "timeOut": "5000",
-        "extendedTimeOut": "1000",
-        "showEasing": "swing",
-        "hideEasing": "linear",
-        "showMethod": "fadeIn",
-        "hideMethod": "fadeOut"
-    }
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
     </script>
     @yield('myScript')
 </body>

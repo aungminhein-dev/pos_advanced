@@ -6,13 +6,14 @@ use App\Models\Tag;
 use App\Models\Size;
 use App\Models\Brand;
 use App\Models\Event;
+use App\Models\Image;
 use App\Models\Colour;
+use App\Models\Rating;
 use App\Models\Comment;
 use App\Models\Category;
 use App\Models\Discount;
 use App\Models\SubCategory;
 use App\Models\Notification;
-use App\Models\ProductImage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -20,7 +21,7 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'quantity', 'price', 'rating', 'sub_category_id','slug','view_count','brand_id'];
+    protected $fillable = ['name', 'description', 'quantity', 'price', 'rating', 'sub_category_id','slug','view_count','brand_id','purchasing_price','selling_price'];
 
 
 
@@ -91,7 +92,27 @@ class Product extends Model
 
     public function scopeDetailsBySlug($query,$slug)
     {
-        return $query->where('slug', $slug)->with(['subCategory', 'sizes', 'colours', 'images', 'discount', 'tags','comments'])->first();
+        return $query->where('slug', $slug)->with('subCategory', 'sizes', 'colours', 'images', 'discount', 'tags','ratings')->first();
     }
+
+    public function anImage($id)
+    {
+        $product = Product::find($id);
+        $image = $product->images->first()->image_path;
+        return $image;
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function activityLog()
+    {
+        return $this->morphMany(ActivityLog::class,'loggable');
+    }
+
+
 }
+
 

@@ -20,7 +20,7 @@
                 @endforeach
                 <input type="hidden" name="total" value="{{ total($cartItems) }}">
                 <input type="hidden" name="deliveryPrice" value="0" id="deliveryPrice" value="">
-                <input type="hidden" name="totalWithDeliveryPrice" value="0" id="totalWithDeliveryPrice">
+                <input type="hidden" name="totalWithDeliveryPrice" value="{{ total($cartItems) }}" id="totalWithDeliveryPrice">
                 {{-- <div class="row">
                     <div class="col-lg-6 mb-sm-15">
                         <div class="toggle_info">
@@ -155,7 +155,7 @@
                                 <thead>
                                     <tr>
                                         <th colspan="2">Product</th>
-                                        <th>Total</th>
+                                        <th>Sub Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -173,34 +173,26 @@
                                             </td>
                                             <td>
                                                 <h5><a href="product-details.html">{{ $item->product->name }}</a></h5>
-                                                <span class="product-qty">x {{ $item->quantity }}</span>
+                                                <span class="product-qty">{{ number_format(price_of($item->product)) }} Ks x {{ $item->quantity }}</span>
                                             </td>
-                                            @if ($item->product->discount)
-                                                <td class="price" data-title="Price">
-                                                    <span>{{ discounted_price($item->product->price, $item->product->discount->percentage) }}
-                                                    </span> Kyats
-                                                </td>
-                                            @else
-                                                <td class="price" data-title="Price">
-                                                    <span>{{ $item->prouct->price }}
-                                                    </span>Kyats
-                                                </td>
-                                            @endif
+                                           <td>
+                                            {{ number_format(calculated_subtotal($item->product->price, $item->quantity, $item->product->discount)) }} Ks
+                                           </td>
                                         </tr>
                                     @endforeach
 
                                     <tr>
                                         <th>SubTotal</th>
-                                        <td class="product-subtotal" colspan="2">{{ total($cartItems) }} Kyats</td>
+                                        <td class="product-subtotal" colspan="2">{{number_format( total($cartItems)) }} Kyats</td>
                                     </tr>
                                     <tr>
-                                        <th class="">Shipping + Gate Fee</th>
-                                        <td colspan="2"><em class="shipping">Free Shipping</em></td>
+                                        <th class="">Delivery + Gate Fee</th>
+                                        <td colspan="2"><em class="shipping">Free Delivery</em></td>
                                     </tr>
                                     <tr>
                                         <th>Total</th>
                                         <td colspan="2" class="" id="total"><span
-                                                class="font-xl text-brand fw-900">{{ total($cartItems) }} Kyats</span></td>
+                                                class="font-xl text-brand fw-900">{{total($cartItems) }} Kyats</span></td>
                                     </tr>
                                 </tbody>
                             </table>

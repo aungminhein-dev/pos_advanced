@@ -14,7 +14,7 @@
                 <div class="col-lg-9">
                     <div class="shop-product-fillter">
                         <div class="totall-product">
-                            <p> We found <strong class="text-brand">688</strong> items for you!</p>
+                            <p> We found <strong class="text-brand">{{ $products->total() }}</strong> items for you!</p>
                         </div>
                         <div class="sort-by-product-area">
                             <div class="sort-by-cover mr-10">
@@ -23,11 +23,12 @@
                                         <span><i class="fi-rs-apps"></i>Show:</span>
                                     </div>
                                     <div class="sort-by-dropdown-wrap">
-                                        <span> 50 <i class="fi-rs-angle-small-down"></i></span>
+                                        <span> {{ request('item-per-page') ?? 50 }}<i
+                                                class="fi-rs-angle-small-down"></i></span>
                                     </div>
                                 </div>
                                 <div class="sort-by-dropdown">
-                                    <ul>
+                                    <ul class="itemPerPage">
                                         <li><a class="active" href="#">50</a></li>
                                         <li><a href="#">100</a></li>
                                         <li><a href="#">150</a></li>
@@ -58,541 +59,93 @@
                         </div>
                     </div>
                     <div class="row product-grid-3">
-                        <div class="col-lg-4 col-md-4 col-6 col-sm-6">
-                            <div class="product-cart-wrap mb-30">
-                                <div class="product-img-action-wrap">
-                                    <div class="product-img product-img-zoom">
-                                        <a href="product-details.html">
-                                            <img class="default-img" src="{{ asset('user/assets/imgs/shop/product-2-1.jpg') }}" alt="">
-                                            <img class="hover-img" src="{{ asset('user/assets/imgs/shop/product-2-2.jpg') }}" alt="">
-                                        </a>
+                        @foreach ($products as $product)
+                            <div class="col-lg-4 col-md-4 col-6 col-sm-6">
+                                <div class="product-cart-wrap mb-30">
+                                    <div class="product-img-action-wrap">
+                                        <div class="product-img product-img-zoom">
+
+                                            <a href="{{ route('user.product.details', $product->slug) }}">
+                                                @php
+                                                    $productImages = [];
+                                                    foreach ($product->images as $image) {
+                                                        $productImages[] = $image->image_path;
+                                                    }
+                                                @endphp
+
+                                                @if (count($productImages) > 0)
+                                                    @if (count($productImages) != 1)
+                                                        <img class="default-img" src="{{ asset($productImages[0]) }}"
+                                                            alt="">
+                                                        <img class="hover-img" src="{{ asset($productImages[1]) }}"
+                                                            alt="">
+                                                    @else
+                                                        <img class="default-img" src="{{ asset($productImages[0]) }}"
+                                                            alt="">
+                                                    @endif
+                                                @endif
+                                            </a>
+                                        </div>
+                                        <div class="product-action-1">
+                                            <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal"
+                                                data-bs-target="#quickViewModal">
+                                                <i class="fi-rs-search"></i></a>
+                                            <a aria-label="Add To Wishlist" class="action-btn hover-up"
+                                                href="wishlist.php"><i class="fi-rs-heart"></i></a>
+                                            <a aria-label="Compare" class="action-btn hover-up" href="compare.php"><i
+                                                    class="fi-rs-shuffle"></i></a>
+                                        </div>
+                                        <div class="product-badges product-badges-position product-badges-mrg">
+                                            @if ($product->quantity === 0)
+                                                <span class="hot">Out of stock</span>
+                                            @endif
+                                            @if ($product->arrival_status == 'New')
+                                                <span class="new">{{ $product->arrival_status }}</span>
+                                            @else
+                                                - {{ $product->discount->percentage }} %
+                                            @endif
+                                        </div>
                                     </div>
-                                    <div class="product-action-1">
-                                        <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal"
-                                            data-bs-target="#quickViewModal">
-                                            <i class="fi-rs-search"></i></a>
-                                        <a aria-label="Add To Wishlist" class="action-btn hover-up" href="wishlist.php"><i
-                                                class="fi-rs-heart"></i></a>
-                                        <a aria-label="Compare" class="action-btn hover-up" href="compare.php"><i
-                                                class="fi-rs-shuffle"></i></a>
-                                    </div>
-                                    <div class="product-badges product-badges-position product-badges-mrg">
-                                        <span class="hot">Hot</span>
-                                    </div>
-                                </div>
-                                <div class="product-content-wrap">
-                                    <div class="product-category">
-                                        <a href="shop.html">Music</a>
-                                    </div>
-                                    <h2><a href="product-details.html">Colorful Pattern Shirts</a></h2>
-                                    <div class="rating-result" title="90%">
-                                        <span>
-                                            <span>90%</span>
-                                        </span>
-                                    </div>
-                                    <div class="product-price">
-                                        <span>$238.85 </span>
-                                        <span class="old-price">$245.8</span>
-                                    </div>
-                                    <div class="product-action-1 show">
-                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.php"><i
-                                                class="fi-rs-shopping-bag-add"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-6 col-sm-6">
-                            <div class="product-cart-wrap mb-30">
-                                <div class="product-img-action-wrap">
-                                    <div class="product-img product-img-zoom">
-                                        <a href="product-details.html">
-                                            <img class="default-img" src="{{ asset('user/assets/imgs/shop/product-3-1.jpg') }}" alt="">
-                                            <img class="hover-img" src="{{ asset('user/assets/imgs/shop/product-3-2.jpg') }}" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="product-action-1">
-                                        <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal"
-                                            data-bs-target="#quickViewModal">
-                                            <i class="fi-rs-search"></i></a>
-                                        <a aria-label="Add To Wishlist" class="action-btn hover-up" href="wishlist.php"><i
-                                                class="fi-rs-heart"></i></a>
-                                        <a aria-label="Compare" class="action-btn hover-up" href="compare.php"><i
-                                                class="fi-rs-shuffle"></i></a>
-                                    </div>
-                                    <div class="product-badges product-badges-position product-badges-mrg">
-                                        <span class="new">New</span>
-                                    </div>
-                                </div>
-                                <div class="product-content-wrap">
-                                    <div class="product-category">
-                                        <a href="shop.html">Music</a>
-                                    </div>
-                                    <h2><a href="product-details.html">Cartoon Astronaut T-Shirts</a></h2>
-                                    <div class="rating-result" title="90%">
-                                        <span>
-                                            <span>50%</span>
-                                        </span>
-                                    </div>
-                                    <div class="product-price">
-                                        <span>$138.85 </span>
-                                        <span class="old-price">$255.8</span>
-                                    </div>
-                                    <div class="product-action-1 show">
-                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.php"><i
-                                                class="fi-rs-shopping-bag-add"></i></a>
+                                    <div class="product-content-wrap">
+                                        <div class="product-category">
+                                            <a href="shop.html">{{ $product->brand->name }}</a>
+                                        </div>
+                                        <h2><a
+                                                href="{{ route('user.product.details', $product->slug) }}">{{ $product->name }}</a>
+                                        </h2>
+                                        <div class="">
+                                            @for ($i = 0; $i < star_rating_of($product); $i++)
+                                                <i class="fi-rs-star text-warning fs-xs"></i>
+                                            @endfor
+                                            <span>
+                                                <span>{{ number_rating_of($product) ?  number_rating_of($product)."/ 10" :"(Not Rated)" }} </span>
+                                            </span>
+                                        </div>
+
+                                        @if ($product->discount)
+                                            <div class="product-price">
+                                                <span>{{ number_format(price_of($product)) }}
+                                                    Ks</span>
+                                                <span class="old-price">{{ number_format(price_of($product)) }} Ks</span>
+                                            </div>
+                                        @else
+                                            <div class="product-price">
+                                                <span>{{ number_format(price_of($product)) }} Ks</span>
+                                            </div>
+                                        @endif
+                                        <div class="product-action-1 show">
+                                            <a aria-label="Add To Cart" onclick="addToCart({{ $product->id }});return false;"
+                                                class="action-btn hover-up" href="#"><i
+                                                    class="fi-rs-shopping-bag-add"></i></a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-6 col-sm-6">
-                            <div class="product-cart-wrap mb-30">
-                                <div class="product-img-action-wrap">
-                                    <div class="product-img product-img-zoom">
-                                        <a href="product-details.html">
-                                            <img class="default-img" src="{{ asset('user/assets/imgs/shop/product-7-1.jpg') }}"
-                                                alt="">
-                                            <img class="hover-img" src="{{ asset('user/assets/imgs/shop/product-7-2.jpg') }}" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="product-action-1">
-                                        <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal"
-                                            data-bs-target="#quickViewModal">
-                                            <i class="fi-rs-search"></i></a>
-                                        <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                            href="wishlist.php"><i class="fi-rs-heart"></i></a>
-                                        <a aria-label="Compare" class="action-btn hover-up" href="compare.php"><i
-                                                class="fi-rs-shuffle"></i></a>
-                                    </div>
-                                    <div class="product-badges product-badges-position product-badges-mrg">
-                                        <span class="best">Best Sell</span>
-                                    </div>
-                                </div>
-                                <div class="product-content-wrap">
-                                    <div class="product-category">
-                                        <a href="shop.html">Watch</a>
-                                    </div>
-                                    <h2><a href="product-details.html">Plain Striola Shirts</a></h2>
-                                    <div class="rating-result" title="90%">
-                                        <span>
-                                            <span>95%</span>
-                                        </span>
-                                    </div>
-                                    <div class="product-price">
-                                        <span>$338.85 </span>
-                                        <span class="old-price">$445.8</span>
-                                    </div>
-                                    <div class="product-action-1 show">
-                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.php"><i
-                                                class="fi-rs-shopping-bag-add"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-6 col-sm-6">
-                            <div class="product-cart-wrap mb-30">
-                                <div class="product-img-action-wrap">
-                                    <div class="product-img product-img-zoom">
-                                        <a href="product-details.html">
-                                            <img class="default-img" src="{{ asset('user/assets/imgs/shop/product-1-2.jpg') }}"
-                                                alt="">
-                                            <img class="hover-img" src="{{ asset('user/assets/imgs/shop/product-1-2.jpg') }}" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="product-action-1">
-                                        <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal"
-                                            data-bs-target="#quickViewModal">
-                                            <i class="fi-rs-search"></i></a>
-                                        <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                            href="wishlist.php"><i class="fi-rs-heart"></i></a>
-                                        <a aria-label="Compare" class="action-btn hover-up" href="compare.php"><i
-                                                class="fi-rs-shuffle"></i></a>
-                                    </div>
-                                    <div class="product-badges product-badges-position product-badges-mrg">
-                                        <span class="sale">Sale</span>
-                                    </div>
-                                </div>
-                                <div class="product-content-wrap">
-                                    <div class="product-category">
-                                        <a href="shop.html">Music</a>
-                                    </div>
-                                    <h2><a href="product-details.html">Landscape Painting Shirt</a></h2>
-                                    <div class="rating-result" title="90%">
-                                        <span>
-                                            <span>70%</span>
-                                        </span>
-                                    </div>
-                                    <div class="product-price">
-                                        <span>$123.85 </span>
-                                        <span class="old-price">$235.8</span>
-                                    </div>
-                                    <div class="product-action-1 show">
-                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.php"><i
-                                                class="fi-rs-shopping-bag-add"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-6 col-sm-6">
-                            <div class="product-cart-wrap mb-30">
-                                <div class="product-img-action-wrap">
-                                    <div class="product-img product-img-zoom">
-                                        <a href="product-details.html">
-                                            <img class="default-img" src="{{ asset('user/assets/imgs/shop/product-4-1.jpg') }}"
-                                                alt="">
-                                            <img class="hover-img" src="{{ asset('user/assets/imgs/shop/product-3-2.jpg') }}" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="product-action-1">
-                                        <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal"
-                                            data-bs-target="#quickViewModal">
-                                            <i class="fi-rs-search"></i></a>
-                                        <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                            href="wishlist.php"><i class="fi-rs-heart"></i></a>
-                                        <a aria-label="Compare" class="action-btn hover-up" href="compare.php"><i
-                                                class="fi-rs-shuffle"></i></a>
-                                    </div>
-                                    <div class="product-badges product-badges-position product-badges-mrg">
-                                        <span class="hot">-30%</span>
-                                    </div>
-                                </div>
-                                <div class="product-content-wrap">
-                                    <div class="product-category">
-                                        <a href="shop.html">Speaker</a>
-                                    </div>
-                                    <h2><a href="product-details.html">Letter Print T-Shirt</a></h2>
-                                    <div class="rating-result" title="90%">
-                                        <span>
-                                            <span>70%</span>
-                                        </span>
-                                    </div>
-                                    <div class="product-price">
-                                        <span>$28.85 </span>
-                                        <span class="old-price">$45.8</span>
-                                    </div>
-                                    <div class="product-action-1 show">
-                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.php"><i
-                                                class="fi-rs-shopping-bag-add"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-6 col-sm-6">
-                            <div class="product-cart-wrap mb-30">
-                                <div class="product-img-action-wrap">
-                                    <div class="product-img product-img-zoom">
-                                        <a href="product-details.html">
-                                            <img class="default-img" src="{{ asset('user/assets/imgs/shop/product-5-2.jpg') }}"
-                                                alt="">
-                                            <img class="hover-img" src="{{ asset('user/assets/imgs/shop/product-5-2.jpg') }}" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="product-action-1">
-                                        <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal"
-                                            data-bs-target="#quickViewModal">
-                                            <i class="fi-rs-search"></i></a>
-                                        <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                            href="wishlist.php"><i class="fi-rs-heart"></i></a>
-                                        <a aria-label="Compare" class="action-btn hover-up" href="compare.php"><i
-                                                class="fi-rs-shuffle"></i></a>
-                                    </div>
-                                    <div class="product-badges product-badges-position product-badges-mrg">
-                                        <span class="hot">-22%</span>
-                                    </div>
-                                </div>
-                                <div class="product-content-wrap">
-                                    <div class="product-category">
-                                        <a href="shop.html">Camera</a>
-                                    </div>
-                                    <h2><a href="product-details.html">Element Pattern Print Shirts</a></h2>
-                                    <div class="rating-result" title="90%">
-                                        <span>
-                                            <span>70%</span>
-                                        </span>
-                                    </div>
-                                    <div class="product-price">
-                                        <span>$238.85 </span>
-                                        <span class="old-price">$245.8</span>
-                                    </div>
-                                    <div class="product-action-1 show">
-                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.php"><i
-                                                class="fi-rs-shopping-bag-add"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-6 col-sm-6">
-                            <div class="product-cart-wrap mb-30">
-                                <div class="product-img-action-wrap">
-                                    <div class="product-img product-img-zoom">
-                                        <a href="product-details.html">
-                                            <img class="default-img" src="{{ asset('user/assets/imgs/shop/product-8-2.jpg') }}"
-                                                alt="">
-                                            <img class="hover-img" src="{{ asset('user/assets/imgs/shop/product-8-1.jpg') }}" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="product-action-1">
-                                        <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal"
-                                            data-bs-target="#quickViewModal">
-                                            <i class="fi-rs-search"></i></a>
-                                        <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                            href="wishlist.php"><i class="fi-rs-heart"></i></a>
-                                        <a aria-label="Compare" class="action-btn hover-up" href="compare.php"><i
-                                                class="fi-rs-shuffle"></i></a>
-                                    </div>
-                                    <div class="product-badges product-badges-position product-badges-mrg">
-                                        <span class="new">New</span>
-                                    </div>
-                                </div>
-                                <div class="product-content-wrap">
-                                    <div class="product-category">
-                                        <a href="shop.html">Phone</a>
-                                    </div>
-                                    <h2><a href="product-details.html">Vintage Henley Shirt</a></h2>
-                                    <div class="rating-result" title="90%">
-                                        <span>
-                                            <span>98%</span>
-                                        </span>
-                                    </div>
-                                    <div class="product-price">
-                                        <span>$1275.85 </span>
-                                    </div>
-                                    <div class="product-action-1 show">
-                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.php"><i
-                                                class="fi-rs-shopping-bag-add"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-6 col-sm-6">
-                            <div class="product-cart-wrap mb-30">
-                                <div class="product-img-action-wrap">
-                                    <div class="product-img product-img-zoom">
-                                        <a href="product-details.html">
-                                            <img class="default-img" src="{{ asset('user/assets/imgs/shop/product-11-1.jpg') }}"
-                                                alt="">
-                                            <img class="hover-img" src="{{ asset('user/assets/imgs/shop/product-11-2.jpg') }}"
-                                                alt="">
-                                        </a>
-                                    </div>
-                                    <div class="product-action-1">
-                                        <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal"
-                                            data-bs-target="#quickViewModal">
-                                            <i class="fi-rs-search"></i></a>
-                                        <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                            href="wishlist.php"><i class="fi-rs-heart"></i></a>
-                                        <a aria-label="Compare" class="action-btn hover-up" href="compare.php"><i
-                                                class="fi-rs-shuffle"></i></a>
-                                    </div>
-                                </div>
-                                <div class="product-content-wrap">
-                                    <div class="product-category">
-                                        <a href="shop.html">Accessories </a>
-                                    </div>
-                                    <h2><a href="product-details.html">Cotton Leaf Printed</a></h2>
-                                    <div class="rating-result" title="90%">
-                                        <span>
-                                            <span>70%</span>
-                                        </span>
-                                    </div>
-                                    <div class="product-price">
-                                        <span>$238.85 </span>
-                                        <span class="old-price">$245.8</span>
-                                    </div>
-                                    <div class="product-action-1 show">
-                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.php"><i
-                                                class="fi-rs-shopping-bag-add"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-6 col-sm-6">
-                            <div class="product-cart-wrap mb-30">
-                                <div class="product-img-action-wrap">
-                                    <div class="product-img product-img-zoom">
-                                        <a href="product-details.html">
-                                            <img class="default-img" src="{{ asset('user/assets/imgs/shop/product-13-1.jpg') }}"
-                                                alt="">
-                                            <img class="hover-img" src="{{ asset('user/assets/imgs/shop/product-13-2.jpg') }}"
-                                                alt="">
-                                        </a>
-                                    </div>
-                                    <div class="product-action-1">
-                                        <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal"
-                                            data-bs-target="#quickViewModal">
-                                            <i class="fi-rs-search"></i></a>
-                                        <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                            href="wishlist.php"><i class="fi-rs-heart"></i></a>
-                                        <a aria-label="Compare" class="action-btn hover-up" href="compare.php"><i
-                                                class="fi-rs-shuffle"></i></a>
-                                    </div>
-                                </div>
-                                <div class="product-content-wrap">
-                                    <div class="product-category">
-                                        <a href="shop.html">Accessories </a>
-                                    </div>
-                                    <h2><a href="product-details.html">Cotton Leaf Printed</a></h2>
-                                    <div class="rating-result" title="90%">
-                                        <span>
-                                            <span>70%</span>
-                                        </span>
-                                    </div>
-                                    <div class="product-price">
-                                        <span>$238.85 </span>
-                                        <span class="old-price">$245.8</span>
-                                    </div>
-                                    <div class="product-action-1 show">
-                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.php"><i
-                                                class="fi-rs-shopping-bag-add"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-6 col-sm-6">
-                            <div class="product-cart-wrap mb-30">
-                                <div class="product-img-action-wrap">
-                                    <div class="product-img product-img-zoom">
-                                        <a href="product-details.html">
-                                            <img class="default-img" src="{{ asset('user/assets/imgs/shop/product-3-1.jpg') }}"
-                                                alt="">
-                                            <img class="hover-img" src="{{ asset('user/assets/imgs/shop/product-3-2.jpg') }}" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="product-action-1">
-                                        <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal"
-                                            data-bs-target="#quickViewModal">
-                                            <i class="fi-rs-search"></i></a>
-                                        <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                            href="wishlist.php"><i class="fi-rs-heart"></i></a>
-                                        <a aria-label="Compare" class="action-btn hover-up" href="compare.php"><i
-                                                class="fi-rs-shuffle"></i></a>
-                                    </div>
-                                    <div class="product-badges product-badges-position product-badges-mrg">
-                                        <span class="hot">Hot</span>
-                                    </div>
-                                </div>
-                                <div class="product-content-wrap">
-                                    <div class="product-category">
-                                        <a href="shop.html">Music</a>
-                                    </div>
-                                    <h2><a href="product-details.html">Colorful Pattern Shirts</a></h2>
-                                    <div class="rating-result" title="90%">
-                                        <span>
-                                            <span>90%</span>
-                                        </span>
-                                    </div>
-                                    <div class="product-price">
-                                        <span>$238.85 </span>
-                                        <span class="old-price">$245.8</span>
-                                    </div>
-                                    <div class="product-action-1 show">
-                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.php"><i
-                                                class="fi-rs-shopping-bag-add"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-6 col-sm-6">
-                            <div class="product-cart-wrap mb-30">
-                                <div class="product-img-action-wrap">
-                                    <div class="product-img product-img-zoom">
-                                        <a href="product-details.html">
-                                            <img class="default-img" src="{{ asset('user/assets/imgs/shop/product-2-1.jpg') }}"
-                                                alt="">
-                                            <img class="hover-img" src="{{ asset('user/assets/imgs/shop/product-2-2.jpg') }}" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="product-action-1">
-                                        <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal"
-                                            data-bs-target="#quickViewModal">
-                                            <i class="fi-rs-search"></i></a>
-                                        <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                            href="wishlist.php"><i class="fi-rs-heart"></i></a>
-                                        <a aria-label="Compare" class="action-btn hover-up" href="compare.php"><i
-                                                class="fi-rs-shuffle"></i></a>
-                                    </div>
-                                    <div class="product-badges product-badges-position product-badges-mrg">
-                                        <span class="new">New</span>
-                                    </div>
-                                </div>
-                                <div class="product-content-wrap">
-                                    <div class="product-category">
-                                        <a href="shop.html">Music</a>
-                                    </div>
-                                    <h2><a href="product-details.html">Cartoon Astronaut T-Shirts</a></h2>
-                                    <div class="rating-result" title="90%">
-                                        <span>
-                                            <span>50%</span>
-                                        </span>
-                                    </div>
-                                    <div class="product-price">
-                                        <span>$138.85 </span>
-                                        <span class="old-price">$255.8</span>
-                                    </div>
-                                    <div class="product-action-1 show">
-                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.php"><i
-                                                class="fi-rs-shopping-bag-add"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-6 col-sm-6">
-                            <div class="product-cart-wrap mb-30">
-                                <div class="product-img-action-wrap">
-                                    <div class="product-img product-img-zoom">
-                                        <a href="product-details.html">
-                                            <img class="default-img" src="{{ asset('user/assets/imgs/shop/product-7-2.jpg') }}"
-                                                alt="">
-                                            <img class="hover-img" src="{{ asset('user/assets/imgs/shop/product-7-1.jpg') }}" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="product-action-1">
-                                        <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal"
-                                            data-bs-target="#quickViewModal">
-                                            <i class="fi-rs-search"></i></a>
-                                        <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                            href="wishlist.php"><i class="fi-rs-heart"></i></a>
-                                        <a aria-label="Compare" class="action-btn hover-up" href="compare.php"><i
-                                                class="fi-rs-shuffle"></i></a>
-                                    </div>
-                                    <div class="product-badges product-badges-position product-badges-mrg">
-                                        <span class="best">Best Sell</span>
-                                    </div>
-                                </div>
-                                <div class="product-content-wrap">
-                                    <div class="product-category">
-                                        <a href="shop.html">Watch</a>
-                                    </div>
-                                    <h2><a href="product-details.html">Plain Striola Shirts</a></h2>
-                                    <div class="rating-result" title="90%">
-                                        <span>
-                                            <span>95%</span>
-                                        </span>
-                                    </div>
-                                    <div class="product-price">
-                                        <span>$338.85 </span>
-                                        <span class="old-price">$445.8</span>
-                                    </div>
-                                    <div class="product-action-1 show">
-                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.php"><i
-                                                class="fi-rs-shopping-bag-add"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                     <!--pagination-->
                     <div class="pagination-area mt-15 mb-sm-5 mb-lg-0">
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination justify-content-start">
-                                <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                                <li class="page-item"><a class="page-link" href="#">02</a></li>
-                                <li class="page-item"><a class="page-link" href="#">03</a></li>
-                                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                                <li class="page-item"><a class="page-link" href="#">16</a></li>
-                                <li class="page-item"><a class="page-link" href="#"><i
-                                            class="fi-rs-angle-double-small-right"></i></a></li>
-                            </ul>
-                        </nav>
+                        {{ $products->links('vendor.pagination.custom') }}
                     </div>
                 </div>
                 <div class="col-lg-3 primary-sidebar sticky-sidebar">
@@ -603,13 +156,11 @@
                     <div class="widget-category mb-30">
                         <h5 class="section-title style-1 mb-30 wow fadeIn animated">Category</h5>
                         <ul class="categories">
-                            <li><a href="shop.html">Shoes & Bags</a></li>
-                            <li><a href="shop.html">Blouses & Shirts</a></li>
-                            <li><a href="shop.html">Dresses</a></li>
-                            <li><a href="shop.html">Swimwear</a></li>
-                            <li><a href="shop.html">Beauty</a></li>
-                            <li><a href="shop.html">Jewelry & Watch</a></li>
-                            <li><a href="shop.html">Accessories</a></li>
+                            @foreach ($categories as $category)
+                                <li><a href="shop.html">{{ $category->name }} <span
+                                            class="badge badge-pill badge-secondary">{{ $category->products_count }}</span></a>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                     <!-- Fillter By Price -->
@@ -720,4 +271,45 @@
             </div>
         </div>
     </section>
+@endsection
+@section('myScript')
+    <script>
+        function addToCart(productId) {
+            @auth
+            let userId = "{{ Auth::user()->id }}";
+        @else
+            let userId = null;
+        @endauth
+        if (!userId) {
+            toastr.warning("Please log in first", "Error")
+            return;
+        }
+        let quantity = 1;
+        $.ajax({
+            url: '/add-to-cart',
+            method: 'get',
+            data: {
+                'quantity': quantity,
+                'productId': productId
+            },
+            success: function(response) {
+                Livewire.dispatch('addedToCart')
+            },
+            error: function(error) {
+                toastr.error("Something Went Wrong", "Failed")
+            }
+        })
+
+        }
+        $('.itemPerPage li a').click(function() {
+            let itemCount = $(this).text();
+            $.ajax({
+                url: `/shop?item-per-page=${itemCount}`,
+                method: 'get',
+                success: function() {
+                    window.location.href = `/shop?item-per-page=${itemCount}`
+                }
+            })
+        })
+    </script>
 @endsection

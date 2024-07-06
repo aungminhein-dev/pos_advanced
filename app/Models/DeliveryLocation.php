@@ -16,4 +16,9 @@ class DeliveryLocation extends Model
     {
         return $this->morphMany(Notification::class,'notifiable');
     }
+
+    public function activityLog()
+    {
+        return $this->morphMany(ActivityLog::class,'loggable');
+    }
 }

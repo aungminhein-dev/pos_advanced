@@ -18,10 +18,10 @@
                 <table class="table table-striped">
                     <tr>
 
-                        <th></th>
+                        <th>#</th>
                         <th>Total</th>
                         <th>Status</th>
-                        <th>Phone</th>
+                        <th>Order Code</th>
                         <th>Action</th>
                     </tr>
                     @foreach ($orders as $order)
@@ -30,21 +30,19 @@
                             <td><img width="20" alt="image" src="{{ asset('admin/dist/assets/img/avatar/avatar-1.png ') }}"
                                 class="rounded-circle
                                 mr-1">{{ $order->user->name }}</td>
-                            <td>{{ $order->total }}</td>
+                            <td>{{ $order->total }} Ks</td>
 
                             <td>
-                                <livewire:admin.order-badge status="{{ $order->status }}"/>
+                                <x-order-badge :status="$order->status"/>
                             </td>
                             <td>
-                                {{ $order->phone }}
+                                {{ $order->order_code }}
                             </td>
                             @if ($order->status == 0)
                             <td>
-                                <a href="#" class="btn btn-success"><i class="fa-solid fa-circle-check"></i></a>
+                                <a href="#" wire:click="accept({{ $order->id }})" class="btn btn-success"><i class="fa-solid fa-circle-check"></i></a>
                                 <a href="#" class="btn btn-danger"><i class="fa-solid fa-circle-xmark"></i></a>
-                                {{-- <a class="btn btn-danger btn-action delete-product" data-toggle="modal"
-                                    data-target="#exampleModal" data-product-id="{{ $product->id }}"><i
-                                        class="fas fa-trash"></i></a> --}}
+
                             </td>
                             @endif
                         </tr>

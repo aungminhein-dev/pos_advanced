@@ -44,17 +44,11 @@
                                                         {{ $item->product->name }}</a></h5>
 
                                             </td>
-                                            @if ($item->product->discount)
+
                                                 <td class="price" data-title="Price">
-                                                    <span>{{ discounted_price($item->product->price, $item->product->discount->percentage) }}
+                                                    <span>{{ price_of($item->product) }}
                                                     </span> Kyats
                                                 </td>
-                                            @else
-                                                <td class="price" data-title="Price">
-                                                    <span>{{ $item->prouct->price }}
-                                                    </span>Kyats
-                                                </td>
-                                            @endif
 
                                             <td class="text-center" data-title="Stock">
                                                 <div class="detail-qty border radius m-auto">

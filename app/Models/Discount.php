@@ -26,4 +26,6 @@ class Discount extends Model
     {
         return $this->morphMany(Notification::class,'notifiable');
     }
+
+    
 }

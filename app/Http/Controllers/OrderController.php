@@ -10,4 +10,6 @@ class OrderController extends Controller
     {
         return view('admin.order.list');
     }
+
+    
 }

@@ -64,6 +64,16 @@
             <form action="{{ route('product.add') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="previews-container"></div>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
 
                 <div class="row">
 
@@ -96,7 +106,8 @@
                     <div class="col-12 col-lg-6">
                         <div class="form-group">
                             <label>Available Quantity <span class="text-danger">*</span></label>
-                            <input type="number" value="{{ old('quantity') }}" name="quantity" min="1" placeholder="Enter quantity" id=""
+                            <input type="number" value="{{ old('quantity') }}" name="quantity" min="1"
+                                placeholder="Enter quantity" id=""
                                 class="form-control @error('quantity') 'is-invalid'  @enderror">
                             @error('quantity')
                                 <small class="text-danger">{{ $message }}</small>
@@ -106,13 +117,39 @@
                     <div class="col-12 col-lg-6">
                         <div class="form-group">
                             <label>Price <span class="text-danger">*</span></label>
-                            <input type="number" min="0" value="{{ old('price') }}" name="price" placeholder="Enter price"
-                                class="form-control @error('price') 'is-invalid'  @enderror">
+                            <input type="number" min="0" value="{{ old('price') }}" name="price"
+                                placeholder="Enter price" class="form-control @error('price') 'is-invalid'  @enderror">
                             @error('price')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                     </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="form-group">
+                            <label>Purchasing Price <span class="text-danger">*</span></label>
+                            <input type="number" min="0" value="{{ old('purchasingPrice') }}"
+                                name="purchasingPrice" placeholder="Enter price"
+                                class="form-control @error('purchasingPrice') 'is-invalid'  @enderror">
+                            @error('purchasingPrice')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="form-group">
+                            <label>Selling Price <span class="text-danger">*</span></label>
+                            <input type="number" min="0" value="{{ old('sellingPrice') }}" name="sellingPrice"
+                                placeholder="Enter price"
+                                class="form-control @error('sellingPrice') 'is-invalid'  @enderror">
+                            @error('sellingPrice')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
+
+
                     <div class="col-12 col-lg-6">
                         <label for="">Category</label>
                         <select class="form-control selectric" onchange="addSubCategory(event)" name="subCategories">
@@ -145,25 +182,29 @@
                             <div class="row gutters-xs" id="colorContainer">
                                 <div class="col-auto">
                                     <label class="colorinput">
-                                        <input name="colours[]" type="checkbox" value=" #007bff" class="colorinput-input" />
+                                        <input name="colours[]" type="checkbox" value=" #007bff"
+                                            class="colorinput-input" />
                                         <span class="colorinput-color bg-primary"></span>
                                     </label>
                                 </div>
                                 <div class="col-auto">
                                     <label class="colorinput">
-                                        <input name="colours[]" type="checkbox" value="#6c757d" class="colorinput-input" />
+                                        <input name="colours[]" type="checkbox" value="#6c757d"
+                                            class="colorinput-input" />
                                         <span class="colorinput-color bg-secondary"></span>
                                     </label>
                                 </div>
                                 <div class="col-auto">
                                     <label class="colorinput">
-                                        <input name="colours[]" type="checkbox" value="#dc3545" class="colorinput-input" />
+                                        <input name="colours[]" type="checkbox" value="#dc3545"
+                                            class="colorinput-input" />
                                         <span class="colorinput-color bg-danger"></span>
                                     </label>
                                 </div>
                                 <div class="col-auto">
                                     <label class="colorinput">
-                                        <input name="colours[]" type="checkbox" value="#ffc107" class="colorinput-input" />
+                                        <input name="colours[]" type="checkbox" value="#ffc107"
+                                            class="colorinput-input" />
                                         <span class="colorinput-color bg-warning"></span>
                                     </label>
                                 </div>
@@ -265,8 +306,8 @@
                     <div class="col-12">
                         <div class="form-group">
                             <label>Discount By %<span class="text-muted">(optional)</span></label>
-                            <input type="number" value="{{ old('discount') }}" oninput="toggleCalendar()" name="discount"
-                                placeholder="Enter percentage for discount" class="form-control">
+                            <input type="number" value="{{ old('discount') }}" oninput="toggleCalendar()"
+                                name="discount" placeholder="Enter percentage for discount" class="form-control">
                         </div>
                     </div>
                     <div id="calendar" class="d-none row">

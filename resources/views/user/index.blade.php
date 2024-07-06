@@ -90,7 +90,7 @@
         </div>
     </section>
     @if ($products->count() > 0)
-    <livewire:user.product-switch/>
+        <livewire:user.product-switch />
     @endif
     <section class="banner-2 section-padding pb-0">
         <div class="container">
@@ -115,10 +115,12 @@
                         @foreach ($categories as $category)
                             <div class="card-1">
                                 <figure class=" img-hover-scale overflow-hidden">
-                                    <a href="shop.html"><img src="{{ asset($category->image->image_path) }}"
-                                            alt=""></a>
+                                    @if ($category->image)
+                                        <a href="shop.html"><img src="{{ asset($category->image->image_path) }}"
+                                                alt=""></a>
+                                    @endif
                                 </figure>
-                                <h5><a href="{shop.html}">{{ $category->name }}</a></h5>
+                                <h5><a href="">{{ $category->name }}</a></h5>
                             </div>
                         @endforeach
                     </div>
@@ -197,16 +199,25 @@
                             <div class="product-cart-wrap small hover-up">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
-                                        <a href="{{ route('user.product.details',$product->id) }}">
+                                        <a href="{{ route('user.product.details', $product->slug) }}">
                                             @php
                                                 $productImages = [];
                                                 foreach ($product->images as $image) {
                                                     $productImages[] = $image->image_path;
                                                 }
                                             @endphp
-                                            <img class="default-img" src="{{ asset($productImages[0]) }}"
-                                                alt="">
-                                            <img class="hover-img" src="{{ asset($productImages[1]) }}" alt="">
+
+                                            @if (count($productImages) > 0)
+                                                @if (count($productImages) != 1)
+                                                    <img class="default-img" src="{{ asset($productImages[0]) }}"
+                                                        alt="">
+                                                    <img class="hover-img" src="{{ asset($productImages[1]) }}"
+                                                        alt="">
+                                                @else
+                                                    <img class="default-img" src="{{ asset($productImages[0]) }}"
+                                                        alt="">
+                                                @endif
+                                            @endif
                                         </a>
                                     </div>
                                     <div class="product-action-1">
@@ -223,7 +234,9 @@
                                     </div>
                                 </div>
                                 <div class="product-content-wrap">
-                                    <h2><a href="{{ route('user.product.details',$product->id) }}">{{ $product->name }}</a></h2>
+                                    <h2><a
+                                            href="{{ route('user.product.details', $product->id) }}">{{ $product->name }}</a>
+                                    </h2>
                                     @if ($product->discount)
                                         @if ($product->rating)
                                             <div class="rating-result" title="">
@@ -261,7 +274,8 @@
                     <div class="carausel-6-columns text-center" id="carausel-6-columns-3">
                         @foreach ($brands as $brand)
                             <div class="brand-logo">
-                                <img class="img-grey-hover" src="{{ asset($brand->image) }}" alt="" height="150px">
+                                <img class="img-grey-hover" src="{{ asset($brand->image) }}" alt=""
+                                    height="150px">
                             </div>
                         @endforeach
 
